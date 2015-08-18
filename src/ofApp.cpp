@@ -19,6 +19,10 @@ void ofApp::setup(){
     int numPixels = 64;
     outputHeight = numPixels;
     
+    selector.setup();
+    selector.position = ofPoint( 230 , 10 );
+    selector.selectionSize = ofPoint( 250 , 150 );
+    
     //setCaptureType( CAPTURE_FROM_IMAGE_FILE , "pano.jpeg" );
     setCaptureType( CAPTURE_FROM_SCREEN , ":)" );
     //setCaptureType( CAPTURE_FROM_VIDEO_FILE , "video01.mov" );
@@ -38,23 +42,38 @@ void ofApp::setup(){
         retinalFactor = 2;
     screenBackground.allocate( retinalFactor * ofGetWidth(), retinalFactor * ofGetHeight() , OF_IMAGE_COLOR_ALPHA );
     
-    gui.setup();
-    gui.add( linesPerSecond.setup("lines per second ", 1000 , 10 , 1000000 ) );
-    gui.add( pixelAtenuation.setup("Pixel Atenuation", .6 , 0 , 1 ) );
-    
-    gui.add( testX.setup("test X" , false ) );
-    gui.add( testY.setup("test Y" , false ) );
-    gui.add( testXY.setup("test XY" , false ) );
-    gui.add( isGammaCorrecting.setup("Gamma correction" , false ) );
-    gui.add( isAtenuated.setup("Atenuated" , false ) );
-    
-    gui.add( updatingStripe01.setup("Draw Stripe 01" , false ) );
-    gui.add( updatingStripe02.setup("Draw Stripe 02" , false ) );
-    gui.add(  updatingAlternating.setup("Alterning stripes" , false ) );
-    
-    gui.loadFromFile("settings.xml");
-    
+    setupGuiInput();
+    setupGuiDebug();
+    setupGuiOutput();
     ofSetLogLevel( OF_LOG_VERBOSE );
+}
+//--------------------------------------------------------------
+void ofApp::setupGuiInput(){
+    guiInput.setup();
+    guiInput.setPosition( 10 , 10 );
+    //guiInput.loadFromFile("settingsInput.xml");
+}
+//--------------------------------------------------------------
+void ofApp::setupGuiDebug(){
+    guiDebug.setup();
+    guiDebug.setPosition( 10 , 40 );
+    guiDebug.add( isDebuging.setup("Debug Mode" , false ) );
+    guiDebug.add( isDebugTestX.setup("test X" , false ) );
+    guiDebug.add( isDebugTestY.setup("test Y" , false ) );
+    guiDebug.add( isDebugisDebugTestXY.setup("test XY" , false ) );
+    //guiDebug.loadFromFile("settingsDebug.xml");
+}
+//--------------------------------------------------------------
+void ofApp::setupGuiOutput(){
+    guiOutput.setup();
+    guiOutput.setPosition( 10 , 160 );
+    guiOutput.add( isAtenuated.setup("Atenuated" , false ) );
+    guiOutput.add( pixelAtenuation.setup("Pixel Atenuation", .6 , 0 , 1 ) );
+    guiOutput.add( isGammaCorrecting.setup("Gamma correction" , false ) );
+    guiOutput.add( linesPerSecond.setup("lines per second ", 1000 , 10 , 1000000 ) );
+    guiOutput.add( isUpdatingStripe01.setup("Draw Stripe 01" , false ) );
+    guiOutput.add( isUpdatingStripe02.setup("Draw Stripe 02" , false ) );
+    //guiOutput.loadFromFile("settingsOutput.xml");
 }
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){
@@ -302,7 +321,7 @@ void ofApp::updateImageOutput(){
             green /= numPix;
             blue /= numPix;
             
-            if( testX ){
+            if( isDebugTestX ){
                 if( x < output.width / 2 ){
                     red = 255;
                     green = 0;
@@ -315,7 +334,7 @@ void ofApp::updateImageOutput(){
                 }
             }
             
-            else if( testY ){
+            else if( isDebugTestY ){
                 if( y < output.height / 2 ){
                     red = 255;
                     green = 0;
@@ -328,7 +347,7 @@ void ofApp::updateImageOutput(){
                 }
             }
             
-            else if( testXY ){
+            else if( isDebugisDebugTestXY ){
                 red     = ofMap( y , 0 , outputHeight   , 0 , 255 );
                 blue    = ofMap( y , 0 , outputHeight    , 255 , 0 );
                 green   = ofMap( x , 0 , outputWidth    , 0 , 255 );
@@ -406,9 +425,13 @@ void ofApp::draw(){
     if( captureType == CAPTURE_FROM_SCREEN )
         screenBackground.draw(0,0, ofGetWidth() , ofGetHeight() );
     if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
-        drawOutput( 430 , 20 , outputWidth , outputHeight );
-        drawInputResul( 430 , 100 , inputImageResult.width , inputImageResult.height );
-        gui.draw();
+        drawOutput( 550 , 20 , outputWidth , outputHeight );
+        drawInputResul( 550 , 100 , inputImageResult.width , inputImageResult.height );
+        
+        guiInput.draw();
+        guiDebug.draw();
+        guiOutput.draw();
+        
         drawLastColum( 0 , 0 , ofGetHeight() / outputHeight , 0 );
         if( captureType ==  CAPTURE_FROM_SCREEN ){
             ofNoFill();
@@ -530,10 +553,14 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
     if(key == 's') {
-        gui.saveToFile("settings.xml");
+        guiDebug.saveToFile("settingsDebug.xml");
+        guiInput.saveToFile("settingsInput.xml");
+        guiOutput.saveToFile("settingsOutput.xml");
     }
     if(key == 'l') {
-        gui.loadFromFile("settings.xml");
+        guiDebug.loadFromFile("settingsDebug.xml");
+        guiInput.loadFromFile("settingsInput.xml");
+        guiOutput.loadFromFile("settingsOutput.xml");
     }
     
     lastTimerUserInteracted = ofGetElapsedTimeMillis();

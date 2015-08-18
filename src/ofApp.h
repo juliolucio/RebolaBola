@@ -15,6 +15,10 @@ public:
                     CAPTURE_FROM_CAMERA } captuteTypes;
     
     void setup();
+    
+    void setupGuiInput();
+    void setupGuiDebug();
+    void setupGuiOutput();
     void openChildApp();
     void update();
     void drawOutput( int x , int y, int width , int height );
@@ -93,15 +97,22 @@ public:
 
     unsigned long long lastTimerUserInteracted;
 
-    ofxIntSlider linesPerSecond;
-    ofxFloatSlider pixelAtenuation;
-    ofxToggle testX;
-    ofxToggle testY;
-    ofxToggle testXY;
-    ofxToggle isGammaCorrecting;
+    //panel input
+    ofxPanel guiInput;
+    
+    //panel debug
+    ofxToggle isDebuging;
+    ofxToggle isDebugTestX;
+    ofxToggle isDebugTestY;
+    ofxToggle isDebugisDebugTestXY;
+    ofxPanel guiDebug;
+    
+    //panel output
     ofxToggle isAtenuated;
-    ofxToggle updatingStripe01;
-    ofxToggle updatingStripe02;
-    ofxToggle updatingAlternating;
-    ofxPanel gui;
+    ofxFloatSlider pixelAtenuation;
+    ofxIntSlider linesPerSecond;
+    ofxToggle isGammaCorrecting;
+    ofxToggle isUpdatingStripe01;
+    ofxToggle isUpdatingStripe02;
+    ofxPanel guiOutput;
 };

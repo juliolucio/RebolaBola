@@ -9,9 +9,9 @@ void ofxScreenSelector::update( ofPoint theWindowPosition ){
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::setup(){
-    position = ofPoint( 20 , 300 );
-    selectionSize = ofPoint( 128 , 128 );
-    markerRadius = 6;
+    position = ofPoint( 0 , 0 );
+    selectionSize = ofPoint( 64 , 64 );
+    markerRadius = 5;
     isVisible = true;
     isDragingMarkerPosition = false;
     isDragingMarkerSize = false;
@@ -19,7 +19,6 @@ void ofxScreenSelector::setup(){
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::draw(){
-    
     ofNoFill();
     ofSetColor( 100 , 255 , 100 );
     ofRect( position.x , position.y , selectionSize.x , selectionSize.y);

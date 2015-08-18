@@ -118,6 +118,9 @@
 		8942EE8F1B7FEC8300016FA2 /* macGlutfix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macGlutfix.h; sourceTree = "<group>"; };
 		8942EE901B7FEC8300016FA2 /* macGlutfix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = macGlutfix.m; sourceTree = "<group>"; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
+		895067331B83F4FC000E0E1E /* settingsDebug.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = settingsDebug.xml; path = bin/data/settingsDebug.xml; sourceTree = "<group>"; };
+		895067341B83F4FC000E0E1E /* settingsInput.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = settingsInput.xml; path = bin/data/settingsInput.xml; sourceTree = "<group>"; };
+		895067351B83F4FC000E0E1E /* settingsOutput.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = settingsOutput.xml; path = bin/data/settingsOutput.xml; sourceTree = "<group>"; };
 		8968EEAF1B0A9DFD00864060 /* gamma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gamma.h; sourceTree = "<group>"; };
 		8968EEB21B0A9DFD00864060 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = main.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		8968EEB31B0A9DFD00864060 /* ofApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofApp.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -262,6 +265,16 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		895067321B83F4F1000E0E1E /* data */ = {
+			isa = PBXGroup;
+			children = (
+				895067331B83F4FC000E0E1E /* settingsDebug.xml */,
+				895067341B83F4FC000E0E1E /* settingsInput.xml */,
+				895067351B83F4FC000E0E1E /* settingsOutput.xml */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
 		A763ED608B35AE3310251DEE /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +361,7 @@
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				895067321B83F4F1000E0E1E /* data */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
@@ -668,6 +682,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -753,6 +768,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
