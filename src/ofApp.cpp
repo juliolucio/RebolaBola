@@ -5,6 +5,8 @@ extern "C" {
 }
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
+    //hola fucker
     ofSetVerticalSync(true);
     
     retina = true;

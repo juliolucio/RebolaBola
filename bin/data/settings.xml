@@ -11,5 +11,6 @@
 <Draw_Stripe_01>0</Draw_Stripe_01>
 	<Draw_Stripe_02>0</Draw_Stripe_02>
 	<Alterning_stripes>0</Alterning_stripes>
-<lines_per_second_>109</lines_per_second_>
+<lines_per_second_>901</lines_per_second_>
+<test_XY>0</test_XY>
 </group>
