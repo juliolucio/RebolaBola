@@ -43,8 +43,9 @@ public:
     bool retina;
     int rx;
     
-    vector<ofColor>colorsStrip01;
-    vector<ofColor>colorsStrip02;
+    vector<ofColor> colorsStrip01;
+    vector<ofColor> colorsStrip02;
+    
     int indexStripe0;
     int indexStripe1;
     
@@ -80,11 +81,13 @@ public:
     void updateImageBackground();
     void updateImageOutput();
     void sendFrameToLedsDivided();
-    void sendFrameToLedsSingle();
-    void tryToSendCplumToStripe01();
+    void sendFrameToLedStripe01();
+    void sendFrameToLedStripe02();
+    void tryToSendColumnToStripe01();
     
     long long lastTimeSendtripe01;
     long long lastTimeSendtripe02;
+    long long currenTime;
     
     ofArduino arduino;
 
