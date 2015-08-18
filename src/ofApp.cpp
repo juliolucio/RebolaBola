@@ -22,6 +22,14 @@ void ofApp::setup(){
     
     linesPerSecond.addListener(this, &ofApp::setPixelLineRate );
     
+    //Setting the graber f using macbook retina, set to true
+    retina = true;
+    if( retina  )
+        rx = 2;
+    else
+        rx = 1;
+    screenBackground.allocate( rx * ofGetWidth(), rx * ofGetHeight() , OF_IMAGE_COLOR_ALPHA );
+    
     gui.setup();
     gui.add( linesPerSecond.setup("lines per second ", 400 , 10 , 1000 ) );
     gui.add( pixelAtenuation.setup("Pixel Atenuation", .6 , 0 , 1 ) );
@@ -72,13 +80,18 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
         default:
             break;
     }
+    
+    if( retina && captureType == CAPTURE_FROM_SCREEN )
+        rx = 2;
+    else
+        rx = 1;
+    
     cout << " setting capture mode to  " <<  captureType << "\n";
     resetSizes();
 }
 //--------------------------------------------------------------
 void ofApp::setPixelLineRate( int & lineRate ){
     micrisecondsBetwenLineUpdate = 1000000 / lineRate;
-    
 }
 //--------------------------------------------------------------
 void ofApp::resetSizes(){
@@ -99,20 +112,21 @@ void ofApp::resetSizes(){
             break;
             
         case CAPTURE_FROM_SCREEN:
-            proportion = ofGetWidth() / ofGetHeight();
+            proportion = selector.selectionSize.x / selector.selectionSize.y;
             outputWidth = proportion * outputHeight;
             
-            captureRestWidth = ofGetWidth() % outputWidth;
-            captureRestHeight = ofGetHeight() % outputHeight;
+            captureRestWidth = int(selector.selectionSize.x) % outputWidth;
+            captureRestHeight = int(selector.selectionSize.y) % outputHeight;
             
-            captureWidth = ofGetWidth() - captureRestWidth;
-            captureHeight = ofGetHeight() - captureRestHeight;
+            captureWidth = selector.selectionSize.x - captureRestWidth;
+            captureHeight = selector.selectionSize.y - captureRestHeight;
+            
             break;
             
         case CAPTURE_FROM_VIDEO_FILE:
             proportion = video.width / video.height;
             outputWidth = proportion * outputHeight;
-
+            
             captureRestWidth = video.width % outputWidth;
             captureRestHeight = video.height % outputHeight;
             
@@ -123,7 +137,7 @@ void ofApp::resetSizes(){
         case CAPTURE_FROM_CAMERA:
             proportion = camera.width / camera.height;
             outputWidth = proportion * outputHeight;
-
+            
             captureRestWidth = camera.width % outputWidth;
             captureRestHeight = camera.height % outputHeight;
             
@@ -134,56 +148,231 @@ void ofApp::resetSizes(){
         default:
             break;
     }
-    numPixelsCapturePerOutputWidth = captureWidth  / outputWidth ;
-    numPixelsCapturePerOutputHeight = captureHeight  / outputHeight;
+    numPixelsCapturePerOutputWidth = ( rx * captureWidth ) / outputWidth ;
+    numPixelsCapturePerOutputHeight = ( rx * captureHeight )  / outputHeight;
+    
+    inputImageResult.clear();
+    inputImageResult.allocate( rx * captureWidth ,  rx * captureHeight , OF_IMAGE_COLOR_ALPHA ) ;
     
     output.clear();
-    output.allocate( outputWidth , outputHeight , OF_IMAGE_COLOR );
-    
-    inputResult.clear();
-    inputResult.allocate( captureWidth , captureHeight , OF_IMAGE_COLOR );
+    output.allocate( outputWidth , outputHeight , OF_IMAGE_COLOR_ALPHA );
     
     cout    << "Reseting sizes capture mode to  " <<  captureType << "\n"
     << "\tcapture width = " <<  captureWidth << "," << "\n"
-    << "\tcapture height = " <<  captureHeight;
+    << "\tcapture height = " <<  captureHeight << "\n" << "\n";
 }
 //--------------------------------------------------------------
 void ofApp::update(){
-    updateCapture();
-    updateOutput();
+    updateImageBackground();
+    selector.update(ofPoint( ofGetWindowPositionX() , ofGetWindowPositionY() ) );
+    updateImageInput();
+    updateImageOutput();
+    return;
     if( updatingAlternating )
         sendFrameToLedsSingle();
     else
         sendFrameToLedsDivided();
 }
 //--------------------------------------------------------------
-void ofApp::updateCapture(){
+void ofApp::updateImageBackground(){
+    unsigned char * pixelsBackground = screenBackground.getPixels();
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+    unsigned char a;
+    
+    pixelsBackground = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , ofGetWidth()  , ofGetHeight() );
+    for (int i = 0; i < rx*rx*ofGetWidth() * ofGetHeight(); i++){
+        r = pixelsBackground[ 4 * i + 1 ];
+        g = pixelsBackground[ 4 * i + 2 ];
+        b = pixelsBackground[ 4 * i + 3 ];
+        a = pixelsBackground[ 4 * i + 0 ];
+        
+        pixelsBackground[ 4 * i + 0 ] = r;
+        pixelsBackground[ 4 * i + 1 ] = g;
+        pixelsBackground[ 4 * i + 2 ] = b;
+        pixelsBackground[ 4 * i + 3 ] = a;
+    }
+    screenBackground.setFromPixels( pixelsBackground , rx * ofGetWidth(), rx * ofGetHeight() , OF_IMAGE_COLOR_ALPHA );
+    screenBackground.update();
+}
+//--------------------------------------------------------------
+void ofApp::updateImageInput(){
     unsigned char * pixelsInput;
     unsigned char * pixelsResult;
+    
     int numInputPixels;
+    
+    pixelsInput = inputImageResult.getPixels();
+
+    
     switch (captureType) {
         case CAPTURE_FROM_IMAGE_FILE:
             for( int x = 0 ; x < captureWidth ; x ++ ){
                 for( int y = 0 ; y < captureHeight ; y ++ ){
-                    inputResult.setColor( x , y , imageFromFile.getColor( x, y ) );
+                    inputImageResult.setColor( x , y , imageFromFile.getColor( x, y ) );
                 }
             }
             break;
             
-        case CAPTURE_FROM_SCREEN:
-            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , captureWidth , captureHeight );
-            pixelsResult = inputResult.getPixels();
+        case CAPTURE_FROM_SCREEN:{
             
-            for (int indexPixelCapture = 0; indexPixelCapture < captureWidth * captureHeight ; indexPixelCapture++){
-                unsigned char g = pixelsInput[ indexPixelCapture * 4 + 2 ];
-                unsigned char r = pixelsInput[ indexPixelCapture * 4 + 1 ];
-                unsigned char b = pixelsInput[ indexPixelCapture * 4 + 3 ];
-                unsigned char a = pixelsInput[ indexPixelCapture * 4 + 0 ];
+            //solution :)))
+            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() + selector.position.x , ofGetWindowPositionY() + selector.position.y , captureWidth , captureHeight );
+            
+            unsigned char r;
+            unsigned char g;
+            unsigned char b;
+            unsigned char a;
+    
+            for (int i = 0; i < rx  * rx * captureWidth * captureHeight; i++){
+                r = pixelsInput[ 4 * i + 1 ];
+                g = pixelsInput[ 4 * i + 2 ];
+                b = pixelsInput[ 4 * i + 3 ];
+                a = pixelsInput[ 4 * i + 0 ];
                 
-                pixelsResult[ indexPixelCapture * 3 + 0 ] = r;
-                pixelsResult[ indexPixelCapture * 3 + 1 ] = g;
-                pixelsResult[ indexPixelCapture * 3 + 2 ] = b;
+                pixelsInput[ 4 * i + 0 ] = r;
+                pixelsInput[ 4 * i + 1 ] = g;
+                pixelsInput[ 4 * i + 2 ] = b;
+                pixelsInput[ 4 * i + 3 ] = a;
             }
+            inputImageResult.setFromPixels( pixelsInput,  rx * captureWidth , rx * captureHeight , OF_IMAGE_COLOR_ALPHA );
+            
+            
+
+            
+            //            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , captureWidth  , captureHeight );
+            //            pixelsInput = pixelsBelowWindow( 0 , 0 , captureWidth  , captureHeight );
+            //
+            //            for( int indexPixelCapture = 0; indexPixelCapture < captureWidth * captureHeight ; indexPixelCapture++ ){
+            //
+            //                unsigned char g = pixelsInput[ indexPixelCapture * 4 + 2 ];
+            //                unsigned char r = pixelsInput[ indexPixelCapture * 4 + 1 ];
+            //                unsigned char b = pixelsInput[ indexPixelCapture * 4 + 3 ];
+            //                //unsigned char a = pixelsInput[ indexPixelCapture *4 8 + 0 ];
+            //
+            //                pixelsResult[ indexPixelCapture * 3 + 0 ] = r;
+            //                pixelsResult[ indexPixelCapture * 3 + 1 ] = g;
+            //                pixelsResult[ indexPixelCapture * 3 + 2 ] = b;
+            //            }
+            
+            
+            //            //first aproach -------------------------------------------------------------------------
+            //
+            //            cout    << "Updating output imageto  " <<  captureType << "\n"
+            //            << "\tcapture width = " <<  captureWidth << "," << "\n"
+            //            << "\tcapture height = " <<  captureHeight << "\n" << "\n"
+            //            << "\ttotal pixelsx = " <<  rx * rx * captureWidth * captureWidth << "\n" << "\n";
+            //
+            //
+            //            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , captureWidth  , captureHeight );
+            //            for( int indexPixelCapture = 0 ; indexPixelCapture < captureWidth * captureWidth ; indexPixelCapture+= 4 ){
+            //                unsigned char g = 0;
+            //                unsigned char r = 0;
+            //                unsigned char b = 0;
+            //                unsigned char a = 0;
+            //                for( int indexRetinalPixel = 0 ; indexRetinalPixel < rx * rx ; indexRetinalPixel ++ ){
+            //                    int indexPixelRetinalGlobal = indexPixelCapture + indexRetinalPixel;
+            //                    g += pixelsInput[ indexPixelRetinalGlobal * 4 + 2 ];
+            //                    r += pixelsInput[ indexPixelRetinalGlobal * 4 + 1 ];
+            //                    b += pixelsInput[ indexPixelRetinalGlobal * 4 + 3 ];
+            //                    a += pixelsInput[ indexPixelRetinalGlobal * 4 + 0 ];
+            //                }
+            ////                r = int(r)/(rx*rx);
+            ////                g = int(g)/(rx*rx);
+            ////                b = int(b)/(rx*rx);
+            ////                a = int(a)/(rx*rx);
+            ////
+            //                pixelsResult[ indexPixelCapture * 4 + 0 ] = r;
+            //                pixelsResult[ indexPixelCapture * 4 + 1 ] = g;
+            //                pixelsResult[ indexPixelCapture * 4 + 2 ] = b;
+            //                pixelsResult[ indexPixelCapture * 4 + 3 ] = 255;
+            //
+            ////                cout    << "Pixel[  " <<  indexPixelCapture << " ]"
+            ////                << "\tr = " <<  r << ","
+            ////                << "\tg = " <<  g << ","
+            ////                << "\tb = " <<  b << "\n";
+            //                //---------------------------------------------------------------------------------------
+            
+            
+            // -------------------------------------------------------------------------
+            //secong aproach -------------------------------------------------------------------------
+            
+//            cout    << "Updating output imageto  " <<  captureType << "\n"
+//            << "\tcapture width = " <<  captureWidth << "," << "\n"
+//            << "\tcapture height = " <<  captureHeight << "\n" << "\n"
+//            << "\ttotal pixelsx = " <<  rx * rx * captureWidth * captureWidth << "\n" << "\n";
+//            
+//            int componentsPerPixell = 4;
+//            int componentsPerPixellRetina = componentsPerPixell * rx * rx;
+//            
+//            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , captureWidth  , captureHeight );
+//            
+//            //we order the colors first
+//            for (int i = 0; i < captureWidth * captureHeight ; i++){
+//                unsigned char r1 = pixelsInput[i*4];
+//                pixelsInput[i*componentsPerPixellRetina]   = pixelsInput[i*componentsPerPixellRetina+1];
+//                pixelsInput[i*componentsPerPixellRetina+1] = pixelsInput[i*componentsPerPixellRetina+2];
+//                pixelsInput[i*componentsPerPixellRetina+2] = pixelsInput[i*componentsPerPixellRetina+3];
+//                pixelsInput[i*componentsPerPixellRetina+3] = r1;
+//            }
+//            inputImageResult.setFromPixels( pixelsInput , rx * captureWidth, rx * captureHeight , OF_IMAGE_COLOR_ALPHA );
+//            inputImageResult.update();
+            
+//            for( int indexPixelCapture = 0 ; indexPixelCapture < captureWidth * captureWidth ; indexPixelCapture++){
+//                std::vector< unsigned char > components;
+//                for( int indexComponetPixell = 0 ; indexComponetPixell < componentsPerPixellRetina ; indexComponetPixell ++ )
+//                    components.push_back( pixelsInput[ indexPixelCapture * componentsPerPixellRetina + indexComponetPixell ] );
+//                
+//                unsigned char r = components[ 0 ];
+//                unsigned char g = components[ 1 ];
+//                unsigned char b = components[ 2 ];
+//                unsigned char a = components[ 3 ];
+//                
+//                pixelsResult[ indexPixelCapture * componentsPerPixell + 0 ] = r;
+//                pixelsResult[ indexPixelCapture * componentsPerPixell + 1 ] = g;
+//                pixelsResult[ indexPixelCapture * componentsPerPixell + 2 ] = b;
+//                pixelsResult[ indexPixelCapture * componentsPerPixell + 3 ] = a;
+//                
+//                //                cout    << "Pixel[  " <<  indexPixelCapture << " ]"
+//                //                << "\tr = " <<  r << ","
+//                //                << "\tg = " <<  g << ","
+//                //                << "\tb = " <<  b << "\n";
+//            }
+            //---------------------------------------------------------------------------------------
+            
+            //third aproach -------------------------------------------------------------------------
+            
+//            cout    << "Updating output imageto  " <<  captureType << "\n"
+//            << "\tcapture width = " <<  captureWidth << "," << "\n"
+//            << "\tcapture height = " <<  captureHeight << "\n" << "\n"
+//            << "\ttotal pixelsx = " <<  rx * rx * captureWidth * captureWidth << "\n" << "\n";
+//            
+//            int componentsPerPixell = 4;
+//            int componentsPerPixellRetina = componentsPerPixell * rx * rx;
+//            
+//            pixelsInput = pixelsBelowWindow( ofGetWindowPositionX() , ofGetWindowPositionY() , captureWidth  , captureHeight );
+//            for( int indexPixelCapture = 0 ; indexPixelCapture < captureWidth * captureWidth ; indexPixelCapture++){
+//                
+//                unsigned char g = pixelsInput[ indexPixelCapture * 4 + 2 ];
+//                unsigned char r = pixelsInput[ indexPixelCapture * 4 + 1 ];
+//                unsigned char b = pixelsInput[ indexPixelCapture * 4 + 3 ];
+//                //unsigned char a = pixelsInput[ indexPixelCapture *4 8 + 0 ];
+//                
+//                pixelsResult[ indexPixelCapture * 3 + 0 ] = r;
+//                pixelsResult[ indexPixelCapture * 3 + 1 ] = g;
+//                pixelsResult[ indexPixelCapture * 3 + 2 ] = b;
+//                
+//                
+//                //                cout    << "Pixel[  " <<  indexPixelCapture << " ]"
+//                //                << "\tr = " <<  r << ","
+//                //                << "\tg = " <<  g << ","
+//                //                << "\tb = " <<  b << "\n";
+//            }
+            //---------------------------------------------------------------------------------------
+        }
+            
+            
             break;
             
         case CAPTURE_FROM_VIDEO_FILE:
@@ -197,7 +386,7 @@ void ofApp::updateCapture(){
                 int x = pixelIndex % video.width;
                 int y = pixelIndex / video.width;
                 if( x < captureWidth && y < captureHeight )
-                    inputResult.setColor( x , y , ofColor( pixelsInput[ indexRed ], pixelsInput[ indexGreen] , pixelsInput[ indexBlue ] ) );
+                    inputImageResult.setColor( x , y , ofColor( pixelsInput[ indexRed ], pixelsInput[ indexGreen] , pixelsInput[ indexBlue ] ) );
             }
             break;
             
@@ -213,7 +402,7 @@ void ofApp::updateCapture(){
                 int x = pixelIndex % camera.width;
                 int y = pixelIndex / camera.width;
                 if( x < captureWidth && y < captureHeight )
-                    inputResult.setColor( x , y , ofColor( pixelsInput[ indexRed ], pixelsInput[ indexGreen] , pixelsInput[ indexBlue ] ) );
+                    inputImageResult.setColor( x , y , ofColor( pixelsInput[ indexRed ], pixelsInput[ indexGreen] , pixelsInput[ indexBlue ] ) );
             }
             break;
             
@@ -221,10 +410,10 @@ void ofApp::updateCapture(){
             break;
             
     }
-    inputResult.update();
+    inputImageResult.update();
 }
 //--------------------------------------------------------------
-void ofApp::updateOutput(){
+void ofApp::updateImageOutput(){
     pixelsOutput = output.getPixels();
     
     for( int y = 0 ; y <  outputHeight  ; y ++){
@@ -241,7 +430,7 @@ void ofApp::updateOutput(){
             
             for( int pixeCaptureY = positionPixelIniCapture.y ; pixeCaptureY < positionPixelIniCapture.y  + numPixelsCapturePerOutputHeight ; pixeCaptureY ++ ){
                 for( int pixeCaptureX = positionPixelIniCapture.x ; pixeCaptureX < positionPixelIniCapture.x  + numPixelsCapturePerOutputWidth ; pixeCaptureX ++){
-                    ofColor currentPixelColor = inputResult.getColor( pixeCaptureX , pixeCaptureY );
+                    ofColor currentPixelColor = inputImageResult.getColor( pixeCaptureX , pixeCaptureY );
                     red     += currentPixelColor.r;
                     green   += currentPixelColor.g;
                     blue    += currentPixelColor.b;
@@ -312,7 +501,7 @@ void ofApp::updateOutput(){
     output.update();
 }
 //--------------------------------------------------------------
-void ofApp::drawOutput( int x , int y){
+void ofApp::drawOutput( int x , int y , int width , int height ){
     int borderSize = 8;
     ofSetColor( 120 , 120 , 180 );
     ofFill();
@@ -322,18 +511,24 @@ void ofApp::drawOutput( int x , int y){
     ofRect( x - borderSize / 2 , y - borderSize / 2 , output.width + 2 * borderSize / 2 , output.height + 2 * borderSize / 2 );
     ofSetColor(255);
     ofNoFill();
-    output.draw( x , y );
+    output.draw( x , y , width , height );
 }
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofHideCursor();
     ofSetColor(255);
+    screenBackground.draw(0,0, ofGetWidth() , ofGetHeight() );
+    
     switch (captureType) {
         case CAPTURE_FROM_IMAGE_FILE:
             imageFromFile.draw(0,0);
             break;
             
         case CAPTURE_FROM_SCREEN:
-            //inputResult.draw(0,0);
+            ofSetColor(50);
+            ofRect( 5, 195,  inputImageResult.width  + 10, inputImageResult.height + 10);
+            ofSetColor(255);
+            inputImageResult.draw( 10 , 200 , inputImageResult.width , inputImageResult.height );
             break;
             
         case CAPTURE_FROM_VIDEO_FILE:
@@ -348,17 +543,30 @@ void ofApp::draw(){
             break;
     }
     
-    
     ofNoFill();
     ofSetColor( 0 , 200 , 10 );
-    ofRect(0,0,captureWidth,captureHeight);
-    ofRect(0,0, ofGetWidth() , ofGetHeight() );
+    ofRect( selector.position.x, selector.position.y, captureWidth, captureHeight);
+    ofRect( selector.position.x, selector.position.y, selector.selectionSize.x, selector.selectionSize.y );
     
-    if( ofGetElapsedTimeMillis() - lastTimerMouseMoved < 7000 ){
-        drawOutput( 500 , 20 );
-        
+    //drawOutput( 0 , 0 , ofGetWidth() , ofGetHeight() );
+    if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
+        drawOutput( 500 , 20 , outputWidth , outputHeight );
         gui.draw();
     }
+    
+    //drawinfg selection area
+    selector.draw();
+    
+    //drawing the mouse cursor
+    ofSetHexColor( 0x660FF77 );
+    ofNoFill();
+    ofCircle( ofGetMouseX() , ofGetMouseY() , 4 );
+    ofFill();
+    ofSetColor( 240 );
+    ofCircle( ofGetMouseX() , ofGetMouseY() , 2 );
+    ofSetHexColor( 0x33FF33 );
+    
+    
 }
 //--------------------------------------------------------------
 void ofApp::sendFrameToLedsDivided(){
@@ -443,6 +651,7 @@ void ofApp::keyPressed(int key){
         default:
             break;
     }
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
 }
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
@@ -452,22 +661,31 @@ void ofApp::keyReleased(int key){
     if(key == 'l') {
         gui.loadFromFile("settings.xml");
     }
+
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
+    
 }
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-    lastTimerMouseMoved = ofGetElapsedTimeMillis();
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
+    selector.mouseMoved(x, y);
 }
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-    lastTimerMouseMoved = ofGetElapsedTimeMillis();
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
+        selector.mouseDragged(x, y , button) ;
 }
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    lastTimerMouseMoved = ofGetElapsedTimeMillis();
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
+     selector.mousePressed(x, y , button) ;
 }
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-    lastTimerMouseMoved = ofGetElapsedTimeMillis();
+    lastTimerUserInteracted = ofGetElapsedTimeMillis();
+    selector.mouseReleased(x, y , button) ;
+    if( selector.isJustRelese )
+        resetSizes();
 }
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){

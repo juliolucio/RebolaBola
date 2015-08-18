@@ -3,6 +3,7 @@
 #include "ofxOPC.h"
 #include "ofxGui.h"
 #include "ofArduino.h"
+#include "ofxScreenSelector.h"
 
 class ofApp : public ofBaseApp{
     
@@ -16,7 +17,7 @@ public:
     void setup();
     void openChildApp();
     void update();
-    void drawOutput( int x , int y);
+    void drawOutput( int x , int y, int width , int height );
     void draw();
     
     void keyPressed(int key);
@@ -38,7 +39,13 @@ public:
     ofVideoPlayer video;
     ofVideoGrabber camera;
     
-    ofImage inputResult;
+    ofxScreenSelector selector;
+    bool retina;
+    int rx;
+    
+    ofImage screenBackground;
+    ofImage inputImageResult;
+    
     ofImage	output;
     
     int numPixels;
@@ -63,8 +70,9 @@ public:
     void setPixelLineRate( int & lineRate );
     
     void resetSizes();
-    void updateCapture();
-    void updateOutput();
+    void updateImageInput();
+    void updateImageBackground();
+    void updateImageOutput();
     void sendFrameToLedsDivided();
     void sendFrameToLedsSingle();
     
@@ -72,7 +80,7 @@ public:
     
     ofArduino arduino;
 
-    unsigned long long lastTimerMouseMoved;
+    unsigned long long lastTimerUserInteracted;
 
     ofxIntSlider linesPerSecond;
     ofxFloatSlider pixelAtenuation;

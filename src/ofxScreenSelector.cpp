@@ -4,13 +4,18 @@ ofxScreenSelector::ofxScreenSelector(){
     setup();
 }
 //--------------------------------------------------------------
+void ofxScreenSelector::update( ofPoint theWindowPosition ){
+    ofPoint position = theWindowPosition;
+}
+//--------------------------------------------------------------
 void ofxScreenSelector::setup(){
     position = ofPoint( 100 , 100 );
     selectionSize = ofPoint( 100 , 100 );
     markerRadius = 6;
     isVisible = true;
     isDragingMarkerPosition = false;
-        isDragingMarkerSize = false;
+    isDragingMarkerSize = false;
+    isJustRelese = false;
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::draw(){
@@ -20,6 +25,7 @@ void ofxScreenSelector::draw(){
     ofFill();
     ofCircle( position , markerRadius );
     ofCircle( position + selectionSize , markerRadius );
+    ofSetColor(255);
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseMoved(int x, int y ){
@@ -53,13 +59,18 @@ void ofxScreenSelector::mousePressed(int x, int y, int button){
         isDragingMarkerPosition = true;
     if( ( ofPoint( x , y ) - (position + selectionSize ) ).length() < markerRadius / 2  && button == 0 )
         isDragingMarkerSize = true;
+    isJustRelese = false;
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseReleased(int x, int y, int button){
-    if( isDragingMarkerPosition )
+    if( isDragingMarkerPosition ){
         isDragingMarkerPosition = false;
-    if( isDragingMarkerSize )
+        isJustRelese = true;
+    }
+    if( isDragingMarkerSize ){
         isDragingMarkerSize = false;
+        isJustRelese = true;
+    }
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::windowResized(int w, int h){
