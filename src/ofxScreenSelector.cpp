@@ -9,8 +9,8 @@ void ofxScreenSelector::update( ofPoint theWindowPosition ){
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::setup(){
-    position = ofPoint( 100 , 100 );
-    selectionSize = ofPoint( 100 , 100 );
+    position = ofPoint( 20 , 300 );
+    selectionSize = ofPoint( 128 , 128 );
     markerRadius = 6;
     isVisible = true;
     isDragingMarkerPosition = false;
@@ -19,13 +19,36 @@ void ofxScreenSelector::setup(){
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::draw(){
-    ofSetColor( 100 , 255 , 100 );
+    
     ofNoFill();
+    ofSetColor( 100 , 255 , 100 );
     ofRect( position.x , position.y , selectionSize.x , selectionSize.y);
+    
+    //moving
     ofFill();
+    ofSetColor( 200 , 50 , 50 );
+    ofCircle( position , markerRadius + 2 );
+    ofSetColor( 50 , 200 , 50 );
     ofCircle( position , markerRadius );
+    ofSetColor( 50 , 50 , 200 );
+    ofCircle( position , markerRadius  - 2);
+    
+    //scaling
+    ofSetColor( 200 , 50 , 50 );
+    ofCircle( position + selectionSize , markerRadius  + 2);
+    ofSetColor( 50 , 200 , 50 );
     ofCircle( position + selectionSize , markerRadius );
+    ofSetColor( 50 , 50 , 200 );
+    ofCircle( position + selectionSize , markerRadius - 2);
     ofSetColor(255);
+    
+    //corners
+    ofSetColor( 100 , 255 , 100 );
+    ofCircle( position.x + selectionSize.x , position.y , markerRadius  - 2);
+    ofCircle( position.x , position.y + selectionSize.y , markerRadius  - 2);
+    
+    ofSetColor(255);
+
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseMoved(int x, int y ){

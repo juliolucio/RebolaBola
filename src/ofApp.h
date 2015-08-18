@@ -18,6 +18,9 @@ public:
     void openChildApp();
     void update();
     void drawOutput( int x , int y, int width , int height );
+    void drawInputResul( int x , int y, int width , int height );
+
+    void drawLastColum( int x , int y , int width , int stripeIndex );
     void draw();
     
     void keyPressed(int key);
@@ -32,9 +35,6 @@ public:
     
     ofxOPC opcClient;
     
-    vector<ofColor> colorsStrip01;
-    vector<ofColor> colorsStrip02;
-    
     ofImage  imageFromFile;
     ofVideoPlayer video;
     ofVideoGrabber camera;
@@ -43,18 +43,24 @@ public:
     bool retina;
     int rx;
     
+    vector<ofColor>colorsStrip01;
+    vector<ofColor>colorsStrip02;
+    int indexStripe0;
+    int indexStripe1;
+    
     ofImage screenBackground;
     ofImage inputImageResult;
     
     ofImage	output;
-    
-    int numPixels;
     
     int captureWidth;
     int captureHeight;
     
     int outputWidth;
     int outputHeight;
+    
+    int lastColunSnedStripe01;
+    int lastColunSnedStripe02;
     
     int updateIndex;
     captuteTypes captureType;
@@ -75,8 +81,10 @@ public:
     void updateImageOutput();
     void sendFrameToLedsDivided();
     void sendFrameToLedsSingle();
+    void tryToSendCplumToStripe01();
     
-    int lastTimeSend;
+    long long lastTimeSendtripe01;
+    long long lastTimeSendtripe02;
     
     ofArduino arduino;
 
@@ -92,9 +100,5 @@ public:
     ofxToggle updatingStripe01;
     ofxToggle updatingStripe02;
     ofxToggle updatingAlternating;
-    
-
-    
     ofxPanel gui;
-    
 };
