@@ -1,0 +1,17 @@
+<group>
+	<test_X>0</test_X>
+	<test_Y>0</test_Y>
+	<test_XYT>0</test_XYT>
+	<Gamma_correction>1</Gamma_correction>
+	<Atenuated>1</Atenuated>
+<group/>
+	<Pixel_Rate>6223</Pixel_Rate>
+	<Pixel_Atenuation>0.745</Pixel_Atenuation>
+<lines_per_second>767</lines_per_second>
+<Draw_Stripe_01>1</Draw_Stripe_01>
+	<Draw_Stripe_02>0</Draw_Stripe_02>
+	<Alterning_stripes>0</Alterning_stripes>
+<lines_per_second_>820001</lines_per_second_>
+<test_XY>0</test_XY>
+<Debug_Mode>0</Debug_Mode>
+</group>
