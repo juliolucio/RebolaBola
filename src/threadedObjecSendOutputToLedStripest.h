@@ -15,6 +15,9 @@ private:
     
     int lastColunSnedStripe01;
     unsigned long long lastTimeSendtripe01;
+    
+    int lastColunSnedStripe02;
+    unsigned long long lastTimeSendtripe02;
 
     void tryToSendColumnToStripe01(){
         unsigned long long delta = ofGetElapsedTimeMicros() - lastTimeSendtripe01;
@@ -33,7 +36,24 @@ private:
              lastTimeSendtripe01 = ofGetElapsedTimeMicros();
         }
     }
-
+    
+    void tryToSendColumnToStripe02(){
+        unsigned long long delta = ofGetElapsedTimeMicros() - lastTimeSendtripe02;
+        if( opcClient.isConnected() && pixelsOutput && delta > delayBetwenLines ){
+            cout << " delta thread= " << delta << "\n";
+            vector<ofColor> colorsStrip02;
+            for( int pixel = 0 ; pixel < outputImage.height ; pixel ++ ){
+                int pixelIndex =  outputImage.width * pixel + lastColunSnedStripe01;
+                ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,  pixelsOutput[ 3 * pixelIndex + 1 ] , pixelsOutput[ 3 * pixelIndex  + 2 ] );
+                colorsStrip02.push_back( pixelColor );
+            }
+            opcClient.writeChannel( indexStripe1 , colorsStrip02 );
+            lastColunSnedStripe02++;
+            if( lastColunSnedStripe02 >= outputImage.width )
+                lastColunSnedStripe02 = 0;
+            lastTimeSendtripe02 = ofGetElapsedTimeMicros();
+        }
+    }
     
 protected:
     ofImage outputImage;
@@ -45,6 +65,8 @@ public:
         lastUpdateTime = 0;
         lastColunSnedStripe01 = 0;
         lastTimeSendtripe01 = 0;
+        lastColunSnedStripe01 = 2;
+        lastTimeSendtripe01 = 2;
         indexStripe0 = 1;
         indexStripe1 = 8;
         delayBetwenLines = 10;
@@ -67,9 +89,8 @@ public:
     void threadedFunction(){
         while( isThreadRunning() ){
             if(lock()){
-                //unsigned long long delta = ofGetElapsedTimeMicros() - lastUpdateTime;
-                //cout << " delta Thread = " << delta << "\n";
                 tryToSendColumnToStripe01();
+                tryToSendColumnToStripe02();
                 lastUpdateTime = ofGetElapsedTimeMicros();
                 unlock();
             }

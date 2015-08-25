@@ -75,7 +75,7 @@ void ofApp::setupGuiOutput(){
     guiOutput.add( isUpdatingStripe01.setup("Draw Stripe 01" , false ) );
     guiOutput.add( isUpdatingStripe02.setup("Draw Stripe 02" , false ) );
     guiOutput.loadFromFile("settingsOutput.xml");
-    guiOutput.add( columDrawingDelay.setup("micros btwen colum ", 1000 , 10 , 10000 ) );
+    guiOutput.add( columDrawingDelay.setup("micros btwen colum ", 100 , 1 , 4000 ) );
     columDrawingDelay.addListener(this, &ofApp::changedColumDrawingDelay );
 }
 //--------------------------------------------------------------

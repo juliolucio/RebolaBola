@@ -115,6 +115,7 @@
 		816E70342F632EF471F614A4 /* NeoPixelStrip.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = NeoPixelStrip.h; path = ../../../addons/ofxOPC/src/NeoPixelStrip.h; sourceTree = SOURCE_ROOT; };
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		882A50CA5733B8DA2A7DAF27 /* NeoPixelShield5x8.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = NeoPixelShield5x8.h; path = ../../../addons/ofxOPC/src/NeoPixelShield5x8.h; sourceTree = SOURCE_ROOT; };
+		890C651F1B8C048D00382E66 /* threadedObjecSendOutputToLedStripest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripest.h; sourceTree = "<group>"; };
 		8942EE8F1B7FEC8300016FA2 /* macGlutfix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macGlutfix.h; sourceTree = "<group>"; };
 		8942EE901B7FEC8300016FA2 /* macGlutfix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = macGlutfix.m; sourceTree = "<group>"; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
@@ -380,6 +381,7 @@
 				89E8D7561B82817600B26AED /* ofxScreenSelector.h */,
 				8968EEB31B0A9DFD00864060 /* ofApp.cpp */,
 				8968EEB41B0A9DFD00864060 /* ofApp.h */,
+				890C651F1B8C048D00382E66 /* threadedObjecSendOutputToLedStripest.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
