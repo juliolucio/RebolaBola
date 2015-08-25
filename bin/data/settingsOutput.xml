@@ -1,0 +1,9 @@
+<group>
+	<Atenuated>1</Atenuated>
+	<Pixel_Atenuation>0.6</Pixel_Atenuation>
+	<Gamma_correction>0</Gamma_correction>
+	<lines_per_second_>1000</lines_per_second_>
+	<Draw_Stripe_01>0</Draw_Stripe_01>
+	<Draw_Stripe_02>0</Draw_Stripe_02>
+<group/>
+</group>

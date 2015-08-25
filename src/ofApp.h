@@ -1,14 +1,13 @@
 #pragma once
 #include "ofMain.h"
-#include "ofxOPC.h"
 #include "ofxGui.h"
 #include "ofArduino.h"
 #include "ofxScreenSelector.h"
+#include "threadedObjecSendOutputToLedStripest.h"
 
 class ofApp : public ofBaseApp{
     
 public:
-    
     typedef enum {  CAPTURE_FROM_IMAGE_FILE,
                     CAPTURE_FROM_SCREEN,
                     CAPTURE_FROM_VIDEO_FILE,
@@ -24,7 +23,7 @@ public:
     void drawOutput( int x , int y, int width , int height );
     void drawInputResul( int x , int y, int width , int height );
 
-    void drawLastColum( int x , int y , int width , int stripeIndex );
+    void drawLastColum( int x , int y , int stripeIndex );
     void draw();
     
     void keyPressed(int key);
@@ -37,7 +36,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    ofxOPC opcClient;
+    //ofxOPC opcClient;
     
     ofImage  imageFromFile;
     ofVideoPlayer video;
@@ -47,11 +46,9 @@ public:
     bool retina;
     int rx;
     
-    vector<ofColor> colorsStrip01;
     vector<ofColor> colorsStrip02;
     
-    int indexStripe0;
-    int indexStripe1;
+
     
     ofImage screenBackground;
     ofImage inputImageResult;
@@ -64,13 +61,10 @@ public:
     int outputWidth;
     int outputHeight;
     
-    int lastColunSnedStripe01;
-    int lastColunSnedStripe02;
-    
     int updateIndex;
     captuteTypes captureType;
     
-    int micrisecondsBetwenLineUpdate;
+    int microsecondsBetwenLineUpdate;
     
     int numPixelsCapturePerOutputWidth;
     int numPixelsCapturePerOutputHeight;
@@ -78,20 +72,23 @@ public:
     unsigned char* pixelsOutput;
     
     void setCaptureType( captuteTypes type  , string fileName );
-    void setPixelLineRate( int & lineRate );
+    
+    void changedColumDrawingDelay( int & lineRate );
+    void setInputModeImage();
+    void setInputModeVideo();
+    void setInputModeCamera();
+    void setInputModeScreen();
+    
+    void processOpenFileImage( ofFileDialogResult openFileResult );
+    void processOpenFileVideo( ofFileDialogResult openFileResult );
     
     void resetSizes();
     void updateImageInput();
     void updateImageBackground();
     void updateImageOutput();
-    void sendFrameToLedsDivided();
-    void sendFrameToLedStripe01();
-    void sendFrameToLedStripe02();
-    void tryToSendColumnToStripe01();
     
-    long long lastTimeSendtripe01;
-    long long lastTimeSendtripe02;
-    long long currenTime;
+    unsigned long long lastUpdateTime;
+
     
     ofArduino arduino;
 
@@ -99,6 +96,10 @@ public:
 
     //panel input
     ofxPanel guiInput;
+    ofxButton butonImage;
+    ofxButton butonVideo;
+    ofxButton butonCamera;
+    ofxButton butonScreen;
     
     //panel debug
     ofxToggle isDebuging;
@@ -110,9 +111,11 @@ public:
     //panel output
     ofxToggle isAtenuated;
     ofxFloatSlider pixelAtenuation;
-    ofxIntSlider linesPerSecond;
+    ofxIntSlider columDrawingDelay;
     ofxToggle isGammaCorrecting;
     ofxToggle isUpdatingStripe01;
     ofxToggle isUpdatingStripe02;
     ofxPanel guiOutput;
+    
+    ThreadedObjecSendOutputToLedStripest threadedObjecSendOutputToLedStripest;
 };
