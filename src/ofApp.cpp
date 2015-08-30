@@ -276,6 +276,7 @@ void ofApp::update(){
     }
     updateImageInput();
     updateImageOutput();
+    //updateImageOutputProjection( 6 , 3 );
     threadedObjecSendOutputToLedStripest.setOutputImage( &output );
     lastUpdateTime = ofGetElapsedTimeMicros();
 }
@@ -458,6 +459,46 @@ void ofApp::updateImageOutput(){
     output.update();
 }
 //--------------------------------------------------------------
+void ofApp::updateImageOutputProjection( int numPixelsPerRevolution , int numrepetitions ){
+    int numberPixelsInBases = output.width / numPixelsPerRevolution;
+    int projectedImageWidht = numberPixelsInBases * numrepetitions;
+    if( outputProjectoed.width != projectedImageWidht || outputProjectoed.height != output.height ){
+        outputProjectoed.clear();
+        outputProjectoed.allocate( projectedImageWidht , outputHeight , OF_IMAGE_COLOR );
+    }
+    float rate = float( outputProjectoed.height ) / float( numberPixelsInBases ) ;
+    pixelsOutputProjected = outputProjectoed.getPixels();
+    for( int x = 0 ; x <  outputProjectoed.width  ; x ++){
+        for( int y = 0 ; y < outputProjectoed.height  ; y ++){
+            int widthForThisHeigh;
+            if( y <= outputProjectoed.height / 2 )
+                widthForThisHeigh = numberPixelsInBases - y * rate;
+            else
+                widthForThisHeigh = y * rate;
+
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            int numPix = 0;
+       
+            for( int pixeCaptureX = x - widthForThisHeigh  ; pixeCaptureX < x + widthForThisHeigh + 1 ; pixeCaptureX ++){
+                ofColor currentPixelColor = output.getColor( pixeCaptureX , y );
+                if( pixeCaptureX >= 0  && pixeCaptureX < output.width ){
+                    red     += currentPixelColor.r;
+                    green   += currentPixelColor.g;
+                    blue    += currentPixelColor.b;
+                    numPix++;
+                }
+            }
+            red /= numPix;
+            green /= numPix;
+            blue /= numPix;
+            outputProjectoed.setColor( x , y , ofColor( red , green , blue) ) ;
+        }
+    }
+    outputProjectoed.update();
+}
+//--------------------------------------------------------------
 void ofApp::drawOutput( int x , int y , int width , int height ){
     int borderSize = 8;
     ofSetColor( 120 , 120 , 180 );
@@ -510,7 +551,7 @@ void ofApp::draw(){
     ofClear(127);
     if( captureType == CAPTURE_FROM_SCREEN )
         screenBackground.draw(0,0, ofGetWidth() , ofGetHeight() );
-    //output.draw( 0 , 0 , ofGetWidth() , ofGetHeight() );
+    outputProjectoed.draw( 0 , 0 , ofGetWidth() , ofGetHeight() );
     drawLastColum( 0 , 0 , 0 );
     if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
         drawOutput( 550 , 20 , outputWidth , outputHeight );

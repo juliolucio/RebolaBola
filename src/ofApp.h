@@ -52,8 +52,8 @@ public:
     
     ofImage screenBackground;
     ofImage inputImageResult;
-    
     ofImage	output;
+    ofImage	outputProjectoed;
     
     int captureWidth;
     int captureHeight;
@@ -70,6 +70,7 @@ public:
     int numPixelsCapturePerOutputHeight;
     
     unsigned char* pixelsOutput;
+    unsigned char* pixelsOutputProjected;
     
     void setCaptureType( captuteTypes type  , string fileName );
     
@@ -86,6 +87,7 @@ public:
     void updateImageInput();
     void updateImageBackground();
     void updateImageOutput();
+    void updateImageOutputProjection(int numPixelsPerRevolution , int numrepetitions );
     
     unsigned long long lastUpdateTime;
 
