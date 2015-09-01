@@ -11,7 +11,9 @@ private:
     bool foundEnd;
     
 protected:
-    float           angleTeta;
+    float angleAlpha;
+    float angleBeta;
+    float angleGamma;
     
 private:
     void recieveMessages( ){
@@ -29,7 +31,6 @@ private:
                         if( byteReaded ){
                             if( byteReaded != 'b' && byteReaded != 'a' )
                                 recieved += byteReaded;
-                            
                             else if( byteReaded == 'b' ){
                                 foundEnd = true;
                                 break;
@@ -39,11 +40,20 @@ private:
                 }
             }
         }
-        int recivedSize = recieved.size();
-        if( foundBegining && foundEnd && recivedSize > 5 ){
-            angleTeta = ofToFloat( recieved );
+        if( foundBegining && foundEnd  ){
+            
+            std::stringstream ss(recieved);
+            std::istream_iterator<std::string> begin(ss);
+            std::istream_iterator<std::string> end;
+            std::vector<std::string> vstrings(begin, end);
+            if( vstrings.size() == 3 ){
+                angleAlpha = ofToFloat( vstrings[0] );
+                angleBeta = ofToFloat( vstrings[1] );
+                angleGamma = ofToFloat( vstrings[2] );
+             }
         }
     }
+    
     
 public:
     threadedObjecRecieveSensorReadings() {
@@ -68,6 +78,7 @@ public:
         while( isThreadRunning() ){
             if(lock()){
                 recieveMessages();
+                cout << "euler = ( " << angleAlpha << " , " << angleBeta << " , " << angleGamma << " ) " << "\n";
                 unlock();
             }
             else
@@ -75,8 +86,16 @@ public:
         }
     }
     
-    float getAngleTeta(){
+    float getAngleAlpha(){
         ofScopedLock lock(mutex);
-        return angleTeta;
+        return angleAlpha;
+    }
+    float getAngleBetta(){
+        ofScopedLock lock(mutex);
+        return angleBeta;
+    }
+    float getAngleGamma(){
+        ofScopedLock lock(mutex);
+        return angleGamma;
     }
 };

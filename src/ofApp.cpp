@@ -15,7 +15,7 @@ void ofApp::setup(){
     
     selector.setup();
     selector.position = ofPoint( 230 , 10 );
-    selector.selectionSize = ofPoint( 250 , 150 );
+    selector.selectionSize = ofPoint( 64 , 64 );
     
     sphere.setup( 2 , numPixels , 1 );
     projectableImage = new ofxProjectableImage();
@@ -288,9 +288,9 @@ void ofApp::update(){
     updateImageOutput();
     threadLedSender.setOutputImage( &output );
     lastUpdateTime = ofGetElapsedTimeMicros();
-    float angleTeta = threadSensorReciver.getAngleTeta();
+    float angleTeta = threadSensorReciver.getAngleAlpha();
     sphere.update( angleTeta );
-    cout << angleTeta << "\n";
+    //cout << angleTeta << "\n";
 }
 //--------------------------------------------------------------
 void ofApp::updateImageBackground(){

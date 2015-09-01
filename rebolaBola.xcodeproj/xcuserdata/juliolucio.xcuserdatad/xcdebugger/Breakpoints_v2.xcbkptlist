@@ -81,38 +81,6 @@
             endingLineNumber = "14"
             landmarkName = "class ofApp"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "non-virtual thunk to ofApp::~ofApp()"
-                  moduleName = "rebolaBola"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/juliolucio/Documents/_Code_/of_v0.8.4_osx_release/apps/myApps/RebolaBola/src/ofApp.h"
-                  timestampString = "462762472.215076"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "628"
-                  endingLineNumber = "628"
-                  offsetFromSymbolStart = "9">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "non-virtual thunk to ofApp::~ofApp()"
-                  moduleName = "rebolaBola"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/juliolucio/Documents/_Code_/of_v0.8.4_osx_release/apps/myApps/RebolaBola/src/ofApp.h"
-                  timestampString = "462762472.215228"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "628"
-                  endingLineNumber = "628"
-                  offsetFromSymbolStart = "11">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

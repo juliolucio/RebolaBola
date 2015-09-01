@@ -11,7 +11,7 @@ void ofxScreenSelector::update( ofPoint theWindowPosition ){
 void ofxScreenSelector::setup(){
     position = ofPoint( 0 , 0 );
     selectionSize = ofPoint( 64 , 64 );
-    markerRadius = 5;
+    markerRadius = 6;
     isVisible = true;
     isDragingMarkerPosition = false;
     isDragingMarkerSize = false;
