@@ -136,6 +136,7 @@
 		8985C6DE1B92858100A8DD68 /* ofxNeoPixelLedSphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxNeoPixelLedSphere.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLed.cpp; sourceTree = "<group>"; };
 		8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLed.h; sourceTree = "<group>"; };
+		899F027F1B9546DC00297DB1 /* rebolaSensorArduino */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensorArduino; sourceTree = "<group>"; };
 		89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxProjectableImage.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		89D6C47F1B94C666002E77D8 /* ofxProjectableImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxProjectableImage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		89D6C4821B94E638002E77D8 /* threadedObjecRecieveSensorReadings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecRecieveSensorReadings.h; sourceTree = "<group>"; };
@@ -386,6 +387,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				899F027F1B9546DC00297DB1 /* rebolaSensorArduino */,
 				8968EEAF1B0A9DFD00864060 /* gamma.h */,
 				8968EEB21B0A9DFD00864060 /* main.cpp */,
 				8942EE8F1B7FEC8300016FA2 /* macGlutfix.h */,
