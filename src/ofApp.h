@@ -4,6 +4,9 @@
 #include "ofArduino.h"
 #include "ofxScreenSelector.h"
 #include "threadedObjecSendOutputToLedStripest.h"
+#include "threadedObjecRecieveSensorReadings.h"
+#include "ofxNeoPixelLedSphere.h"
+#include "ofxProjectableImage.h"
 
 class ofApp : public ofBaseApp{
     
@@ -36,8 +39,6 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    //ofxOPC opcClient;
-    
     ofImage  imageFromFile;
     ofVideoPlayer video;
     ofVideoGrabber camera;
@@ -47,13 +48,10 @@ public:
     int rx;
     
     vector<ofColor> colorsStrip02;
-    
 
-    
     ofImage screenBackground;
     ofImage inputImageResult;
     ofImage	output;
-    ofImage	outputProjectoed;
     
     int captureWidth;
     int captureHeight;
@@ -119,5 +117,10 @@ public:
     ofxToggle isUpdatingStripe02;
     ofxPanel guiOutput;
     
-    ThreadedObjecSendOutputToLedStripest threadedObjecSendOutputToLedStripest;
+    ThreadedObjecSendOutputToLedStripest threadLedSender;
+    threadedObjecRecieveSensorReadings threadSensorReciver;
+    
+    ofxNeoPixelLedSphere sphere;
+    ofxProjectableImage* projectableImage;
+    
 };

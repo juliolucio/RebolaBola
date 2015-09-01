@@ -1,5 +1,6 @@
 #include "ofxNeoPixelLed.h"
 #include "ofxNeoPixelLedArc.h"
+#include "ofxProjectableImage.h"
 //--------------------------------------------------------------
 ofxNeoPixelLedArc::ofxNeoPixelLedArc(){
 }
@@ -15,9 +16,22 @@ void ofxNeoPixelLedArc::setup( int theNumleds , float theRadius ){
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::update( float theAngleTeta ){
-    for( int l = 0 ; l < leds.size() ; l ++ ){
-        leds[ l ]->update( theAngleTeta );
+    float theNewAngle;
+    float piDoubled = 2 * PI;
+    if( theAngleTeta > piDoubled ){
+        int howManyLaps = theAngleTeta / piDoubled;
+        theNewAngle = theAngleTeta - howManyLaps * piDoubled;
     }
+    else theNewAngle = theAngleTeta;
+    
+    for( int l = 0 ; l < leds.size() ; l ++ )
+        leds[ l ]->update( theAngleTeta );
+}
+//--------------------------------------------------------------
+void ofxNeoPixelLedArc::projectImage( ofxProjectableImage* theProjectableImage ){
+    projectableImage = theProjectableImage;
+    for( int l = 0 ; l < leds.size() ; l ++ )
+        leds[ l ]->projectImage( projectableImage );
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::draw(){

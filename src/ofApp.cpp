@@ -2,6 +2,7 @@
 extern "C" {
 #include "macGlutfix.h"
 #include "gamma.h"
+    
 }
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -15,6 +16,10 @@ void ofApp::setup(){
     selector.setup();
     selector.position = ofPoint( 230 , 10 );
     selector.selectionSize = ofPoint( 250 , 150 );
+    
+    sphere.setup( 2 , numPixels , 1 );
+    projectableImage = new ofxProjectableImage();
+    sphere.projectImage( projectableImage );
     
     //setCaptureType( CAPTURE_FROM_IMAGE_FILE , "pano.jpeg" );
     setCaptureType( CAPTURE_FROM_SCREEN , ":)" );
@@ -33,11 +38,13 @@ void ofApp::setup(){
     setupGuiInput();
     setupGuiDebug();
     setupGuiOutput();
+
     
-    //ofSetLogLevel( OF_LOG_VERBOSE );
+    threadLedSender.start();
+    threadLedSender.setOutputColumDelay( columDrawingDelay );
     
-    threadedObjecSendOutputToLedStripest.start();
-    threadedObjecSendOutputToLedStripest.setOutputColumDelay( columDrawingDelay );
+    threadSensorReciver.start();
+    threadSensorReciver.setup( "/dev/cu.usbmodem1411" , 115200 );
 }
 //--------------------------------------------------------------
 void ofApp::setupGuiInput(){
@@ -122,7 +129,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
 //--------------------------------------------------------------
 void ofApp::changedColumDrawingDelay( int & columDrawingDelayRate ){
     microsecondsBetwenLineUpdate = columDrawingDelayRate;
-    threadedObjecSendOutputToLedStripest.setOutputColumDelay( microsecondsBetwenLineUpdate );
+    threadLedSender.setOutputColumDelay( microsecondsBetwenLineUpdate );
     
 }
 //--------------------------------------------------------------
@@ -259,8 +266,11 @@ void ofApp::resetSizes(){
     }
     output.clear();
     output.allocate( outputWidth , outputHeight , OF_IMAGE_COLOR );
+    ofVec3f position = ofVec3f( 2 , 0 , 0 );
+    ofVec3f normal = ofVec3f( -1 , 0 , 0 );
+    projectableImage->setup( &output , position , normal );
     
-    threadedObjecSendOutputToLedStripest.setOutputSize( ofPoint( outputWidth , outputHeight ) );
+    threadLedSender.setOutputSize( ofPoint( outputWidth , outputHeight ) );
     
     cout    << "Reseting sizes capture mode to  " <<  captureType << "\n"
     << "\tcapture width = " <<  captureWidth << "," << "\n"
@@ -276,9 +286,11 @@ void ofApp::update(){
     }
     updateImageInput();
     updateImageOutput();
-    //updateImageOutputProjection( 6 , 3 );
-    threadedObjecSendOutputToLedStripest.setOutputImage( &output );
+    threadLedSender.setOutputImage( &output );
     lastUpdateTime = ofGetElapsedTimeMicros();
+    float angleTeta = threadSensorReciver.getAngleTeta();
+    sphere.update( angleTeta );
+    cout << angleTeta << "\n";
 }
 //--------------------------------------------------------------
 void ofApp::updateImageBackground(){
@@ -459,46 +471,6 @@ void ofApp::updateImageOutput(){
     output.update();
 }
 //--------------------------------------------------------------
-void ofApp::updateImageOutputProjection( int numPixelsPerRevolution , int numrepetitions ){
-    int numberPixelsInBases = output.width / numPixelsPerRevolution;
-    int projectedImageWidht = numberPixelsInBases * numrepetitions;
-    if( outputProjectoed.width != projectedImageWidht || outputProjectoed.height != output.height ){
-        outputProjectoed.clear();
-        outputProjectoed.allocate( projectedImageWidht , outputHeight , OF_IMAGE_COLOR );
-    }
-    float rate = float( outputProjectoed.height ) / float( numberPixelsInBases ) ;
-    pixelsOutputProjected = outputProjectoed.getPixels();
-    for( int x = 0 ; x <  outputProjectoed.width  ; x ++){
-        for( int y = 0 ; y < outputProjectoed.height  ; y ++){
-            int widthForThisHeigh;
-            if( y <= outputProjectoed.height / 2 )
-                widthForThisHeigh = numberPixelsInBases - y * rate;
-            else
-                widthForThisHeigh = y * rate;
-
-            int red = 0;
-            int green = 0;
-            int blue = 0;
-            int numPix = 0;
-       
-            for( int pixeCaptureX = x - widthForThisHeigh  ; pixeCaptureX < x + widthForThisHeigh + 1 ; pixeCaptureX ++){
-                ofColor currentPixelColor = output.getColor( pixeCaptureX , y );
-                if( pixeCaptureX >= 0  && pixeCaptureX < output.width ){
-                    red     += currentPixelColor.r;
-                    green   += currentPixelColor.g;
-                    blue    += currentPixelColor.b;
-                    numPix++;
-                }
-            }
-            red /= numPix;
-            green /= numPix;
-            blue /= numPix;
-            outputProjectoed.setColor( x , y , ofColor( red , green , blue) ) ;
-        }
-    }
-    outputProjectoed.update();
-}
-//--------------------------------------------------------------
 void ofApp::drawOutput( int x , int y , int width , int height ){
     int borderSize = 8;
     ofSetColor( 120 , 120 , 180 );
@@ -551,7 +523,6 @@ void ofApp::draw(){
     ofClear(127);
     if( captureType == CAPTURE_FROM_SCREEN )
         screenBackground.draw(0,0, ofGetWidth() , ofGetHeight() );
-    outputProjectoed.draw( 0 , 0 , ofGetWidth() , ofGetHeight() );
     drawLastColum( 0 , 0 , 0 );
     if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
         drawOutput( 550 , 20 , outputWidth , outputHeight );
@@ -584,79 +555,6 @@ void ofApp::draw(){
     ofSetHexColor( 0x2222ff );
     ofCircle( ofGetMouseX() , ofGetMouseY() , 2 );
 }
-/*
-//--------------------------------------------------------------
-void ofApp::sendFrameToLedsDivided(){
-    vector<ofColor> colorsStrip01;
-    vector<ofColor> colorsStrip02;
-    for( int colum = 0 ; colum < outputWidth / 2 ; colum ++ ){
-        colorsStrip01.clear();
-        colorsStrip02.clear();
-        for( int pixel = 0 ; pixel < outputHeight ; pixel ++ ){
-            int pixelIndex01 = colum + outputWidth * pixel;
-            int pixelIndex02 = ( colum + outputWidth / 2 ) + outputWidth * pixel;
-            
-            ofColor pixelColor01 = ofColor( pixelsOutput[ 3 * pixelIndex01 ] ,  pixelsOutput[ 3 * pixelIndex01 + 1 ] , pixelsOutput[ 3 * pixelIndex01  + 2 ] );
-            ofColor pixelColor02 = ofColor( pixelsOutput[ 3 * pixelIndex02 ] ,  pixelsOutput[ 3 * pixelIndex02 + 1 ] , pixelsOutput[ 3 * pixelIndex02  + 2] );
-            
-            colorsStrip01.push_back(pixelColor01);
-            colorsStrip02.push_back(pixelColor02);
-        }
-        
-        if(opcClient.isConnected()){
-            opcClient.writeChannel( indexStripe0, colorsStrip01 );
-            opcClient.writeChannel( indexStripe1, colorsStrip02 );
-        }
-    }
-}
-//--------------------------------------------------------------
-void ofApp::sendFrameToLedStripe01(){
-    if( opcClient.isConnected() ){
-        for( int colum = 0 ; colum < outputWidth ; colum ++ ){
-                vector<ofColor> colorsStrip01;
-            for( int pixel = 0 ; pixel < outputHeight ; pixel ++ ){
-                int pixelIndex = colum + outputWidth * pixel;
-                ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,  pixelsOutput[ 3 * pixelIndex + 1 ] , pixelsOutput[ 3 * pixelIndex  + 2 ] );
-                colorsStrip01.push_back(pixelColor);
-                opcClient.writeChannel( indexStripe0, colorsStrip01 );
-            }
-        }
-    }
-}
-//--------------------------------------------------------------
-void ofApp::sendFrameToLedStripe02(){
-    if( opcClient.isConnected() ){
-        for( int colum = 0 ; colum < outputWidth ; colum ++ ){
-            colorsStrip02.clear();
-            for( int pixel = 0 ; pixel < outputHeight ; pixel ++ ){
-                int pixelIndex = colum + outputWidth * pixel;
-                ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,  pixelsOutput[ 3 * pixelIndex + 1 ] , pixelsOutput[ 3 * pixelIndex  + 2 ] );
-                colorsStrip02.push_back(pixelColor);
-                opcClient.writeChannel( indexStripe1, colorsStrip02 );
-            }
-        }
-    }
-}
-//--------------------------------------------------------------
-void ofApp::tryToSendColumnToStripe01( ){
-    unsigned long long delta = ofGetElapsedTimeMicros() - lastColunSnedStripe01;
-    if(  delta > microsecondsBetwenLineUpdate && opcClient.isConnected()){
-        vector<ofColor> colorsStrip01;
-        for( int pixel = 0 ; pixel < outputHeight ; pixel ++ ){
-            int pixelIndex =  outputWidth * pixel + lastColunSnedStripe01;
-            ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,  pixelsOutput[ 3 * pixelIndex + 1 ] , pixelsOutput[ 3 * pixelIndex  + 2 ] );
-            colorsStrip01.push_back( pixelColor );
-        }
-        opcClient.writeChannel( indexStripe0 , colorsStrip01 );
-        lastColunSnedStripe01++;
-        lastTimeSendtripe01 = ofGetElapsedTimeMicros();
-        if( lastColunSnedStripe01 >= outputWidth )
-            lastColunSnedStripe01 = 0;
-        
-        cout << " delta = " << delta << "\n";
-    }
-}
- */
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     switch( key ){

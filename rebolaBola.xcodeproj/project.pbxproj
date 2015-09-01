@@ -25,6 +25,7 @@
 		8985C6DF1B92858100A8DD68 /* ofxNeoPixelLedArc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8985C6DB1B92858100A8DD68 /* ofxNeoPixelLedArc.cpp */; };
 		8985C6E01B92858100A8DD68 /* ofxNeoPixelLedSphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8985C6DD1B92858100A8DD68 /* ofxNeoPixelLedSphere.cpp */; };
 		8985C6E31B928E2A00A8DD68 /* ofxNeoPixelLed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */; };
+		89D6C4801B94C666002E77D8 /* ofxProjectableImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */; };
 		89E8D7571B82817600B26AED /* ofxScreenSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89E8D7551B82817600B26AED /* ofxScreenSelector.cpp */; };
 		8ACE302E9E3E65806526EA39 /* NeoPixelGrid8x8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D23E13EC527220EA380557AA /* NeoPixelGrid8x8.cpp */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
@@ -131,10 +132,13 @@
 		8968EEB41B0A9DFD00864060 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofApp.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8985C6DB1B92858100A8DD68 /* ofxNeoPixelLedArc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLedArc.cpp; sourceTree = "<group>"; };
 		8985C6DC1B92858100A8DD68 /* ofxNeoPixelLedArc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLedArc.h; sourceTree = "<group>"; };
-		8985C6DD1B92858100A8DD68 /* ofxNeoPixelLedSphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLedSphere.cpp; sourceTree = "<group>"; };
-		8985C6DE1B92858100A8DD68 /* ofxNeoPixelLedSphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLedSphere.h; sourceTree = "<group>"; };
+		8985C6DD1B92858100A8DD68 /* ofxNeoPixelLedSphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxNeoPixelLedSphere.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		8985C6DE1B92858100A8DD68 /* ofxNeoPixelLedSphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxNeoPixelLedSphere.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLed.cpp; sourceTree = "<group>"; };
 		8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLed.h; sourceTree = "<group>"; };
+		89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxProjectableImage.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		89D6C47F1B94C666002E77D8 /* ofxProjectableImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxProjectableImage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		89D6C4821B94E638002E77D8 /* threadedObjecRecieveSensorReadings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecRecieveSensorReadings.h; sourceTree = "<group>"; };
 		89E8D7551B82817600B26AED /* ofxScreenSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxScreenSelector.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		89E8D7561B82817600B26AED /* ofxScreenSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxScreenSelector.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8DBD959DDDD76B62CED10849 /* NeoPixelRing60px.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = NeoPixelRing60px.h; path = ../../../addons/ofxOPC/src/NeoPixelRing60px.h; sourceTree = SOURCE_ROOT; };
@@ -388,15 +392,18 @@
 				8942EE901B7FEC8300016FA2 /* macGlutfix.m */,
 				89E8D7561B82817600B26AED /* ofxScreenSelector.h */,
 				89E8D7551B82817600B26AED /* ofxScreenSelector.cpp */,
-				8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */,
 				8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */,
+				8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */,
 				8985C6DC1B92858100A8DD68 /* ofxNeoPixelLedArc.h */,
 				8985C6DB1B92858100A8DD68 /* ofxNeoPixelLedArc.cpp */,
 				8985C6DE1B92858100A8DD68 /* ofxNeoPixelLedSphere.h */,
 				8985C6DD1B92858100A8DD68 /* ofxNeoPixelLedSphere.cpp */,
+				89D6C47F1B94C666002E77D8 /* ofxProjectableImage.h */,
+				89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */,
 				8968EEB41B0A9DFD00864060 /* ofApp.h */,
 				8968EEB31B0A9DFD00864060 /* ofApp.cpp */,
 				890C651F1B8C048D00382E66 /* threadedObjecSendOutputToLedStripest.h */,
+				89D6C4821B94E638002E77D8 /* threadedObjecRecieveSensorReadings.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -499,6 +506,7 @@
 			files = (
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
+				89D6C4801B94C666002E77D8 /* ofxProjectableImage.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,

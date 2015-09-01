@@ -1,4 +1,5 @@
 #include "ofxNeoPixelLed.h"
+#include "ofxProjectableImage.h"
 //--------------------------------------------------------------
 ofxNeoPixelLed::ofxNeoPixelLed(){
 }
@@ -9,6 +10,11 @@ void ofxNeoPixelLed::setup( float theAngleFi ){
 //--------------------------------------------------------------
 void ofxNeoPixelLed::update( float theAngleTeta ){
     angleTeta = theAngleTeta;
+    //todo:calculate the pixell color with the image position and sphere pixel position
+}
+//--------------------------------------------------------------
+void ofxNeoPixelLed::projectImage( ofxProjectableImage* theProjectableImage ){
+    projectableImage = theProjectableImage;
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLed::draw(){
