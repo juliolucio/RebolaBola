@@ -7,23 +7,18 @@ ofxNeoPixelLedArc::ofxNeoPixelLedArc(){
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::setup( int theNumleds , float theRadius ){
     radius = theRadius;
-    float deltaFi = ( PI / 2.0f ) / float( theNumleds );
+    float deltaFi =  PI / float( theNumleds + 2 );
+    float piMedios = PI / 2.0;
     for( int l = 0 ; l < theNumleds ; l ++ ){
         ofxNeoPixelLed* tempLed = new ofxNeoPixelLed();
-        tempLed->setup( deltaFi * ( l + 1 ) );
+        tempLed->setup( deltaFi * ( l + 1 ) - piMedios );
         leds.push_back( tempLed );
     }
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::update( float theAngleTeta ){
-    float theNewAngle;
     float piDoubled = 2 * PI;
-    if( theAngleTeta > piDoubled ){
-        int howManyLaps = theAngleTeta / piDoubled;
-        theNewAngle = theAngleTeta - howManyLaps * piDoubled;
-    }
-    else theNewAngle = theAngleTeta;
-    
+    theAngleTeta = fmod( theAngleTeta , piDoubled );
     for( int l = 0 ; l < leds.size() ; l ++ )
         leds[ l ]->update( theAngleTeta );
 }

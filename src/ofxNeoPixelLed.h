@@ -9,6 +9,7 @@ public:
     void setup( float theAngleFi );
     void update( float theAngleTeta );
     void projectImage( ofxProjectableImage* theProjectableImage );
+    
     void draw();
     void mouseMoved(int x, int y );
     void mouseDragged(int x, int y, int button);

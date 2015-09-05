@@ -77,8 +77,10 @@ public:
     void threadedFunction(){
         while( isThreadRunning() ){
             if(lock()){
+                if( serialToArduino->isInitialized() ){
                 recieveMessages();
-                cout << "euler = ( " << angleAlpha << " , " << angleBeta << " , " << angleGamma << " ) " << "\n";
+                //cout << "euler = ( " << angleAlpha << " , " << angleBeta << " , " << angleGamma << " ) " << "\n";
+                }
                 unlock();
             }
             else

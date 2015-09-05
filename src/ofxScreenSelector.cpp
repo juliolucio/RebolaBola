@@ -1,99 +1,95 @@
 #include "ofxScreenSelector.h"
+
+extern "C" {
+#include "macGlutfix.h"
+}
+
 //--------------------------------------------------------------
 ofxScreenSelector::ofxScreenSelector(){
-    setup();
 }
 //--------------------------------------------------------------
-void ofxScreenSelector::update( ofPoint theWindowPosition ){
-    ofPoint position = theWindowPosition;
+void ofxScreenSelector::setup( bool theRetina , ofPoint thePosition , ofPoint theSize ){
+    marker.setup();
+    marker.setPosition( thePosition );
+    marker.setSize( theSize );
+    
+    isRetinaScreen = theRetina;
+    retinalFactor = 1;
+    if( isRetinaScreen  )
+        retinalFactor = 2;
+    
+    selectionFormBackgoundImage = new ofImage();
+    selectionFormBackgoundImage->allocate( retinalFactor * marker.getSize().x, retinalFactor *  marker.getSize().y, OF_IMAGE_COLOR_ALPHA);
 }
 //--------------------------------------------------------------
-void ofxScreenSelector::setup(){
-    position = ofPoint( 0 , 0 );
-    selectionSize = ofPoint( 64 , 64 );
-    markerRadius = 6;
-    isVisible = true;
-    isDragingMarkerPosition = false;
-    isDragingMarkerSize = false;
-    isJustRelese = false;
+void ofxScreenSelector::update(){
+    unsigned char* pixelsSelected = selectionFormBackgoundImage->getPixels();
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+    unsigned char a;
+    
+    pixelsSelected = pixelsBelowWindow( ofGetWindowPositionX() + marker.getPosition().x , ofGetWindowPositionY() + marker.getPosition().y , marker.getSize().x , marker.getSize().y );
+    
+    for (int i = 0; i < retinalFactor  * retinalFactor * marker.getSize().x * marker.getSize().y; i++){
+        r = pixelsSelected[ 4 * i + 1 ];
+        g = pixelsSelected[ 4 * i + 2 ];
+        b = pixelsSelected[ 4 * i + 3 ];
+        a = pixelsSelected[ 4 * i + 0 ];
+        
+        pixelsSelected[ 4 * i + 0 ] = r;
+        pixelsSelected[ 4 * i + 1 ] = g;
+        pixelsSelected[ 4 * i + 2 ] = b;
+        pixelsSelected[ 4 * i + 3 ] = a;
+    }
+    selectionFormBackgoundImage->setFromPixels(pixelsSelected,  retinalFactor * marker.getSize().x,  retinalFactor * marker.getSize().y, OF_IMAGE_COLOR_ALPHA );
+    selectionFormBackgoundImage->update();
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::draw(){
-    ofNoFill();
-    ofSetColor( 100 , 255 , 100 );
-    ofRect( position.x , position.y , selectionSize.x , selectionSize.y);
-    
-    //moving
-    ofFill();
-    ofSetColor( 200 , 50 , 50 );
-    ofCircle( position , markerRadius + 2 );
-    ofSetColor( 50 , 200 , 50 );
-    ofCircle( position , markerRadius );
-    ofSetColor( 50 , 50 , 200 );
-    ofCircle( position , markerRadius  - 2);
-    
-    //scaling
-    ofSetColor( 200 , 50 , 50 );
-    ofCircle( position + selectionSize , markerRadius  + 2);
-    ofSetColor( 50 , 200 , 50 );
-    ofCircle( position + selectionSize , markerRadius );
-    ofSetColor( 50 , 50 , 200 );
-    ofCircle( position + selectionSize , markerRadius - 2);
-    ofSetColor(255);
-    
-    //corners
-    ofSetColor( 100 , 255 , 100 );
-    ofCircle( position.x + selectionSize.x , position.y , markerRadius  - 2);
-    ofCircle( position.x , position.y + selectionSize.y , markerRadius  - 2);
-    
-    ofSetColor(255);
-
+    marker.draw();
+    selectionFormBackgoundImage->draw( 200 , 50 );
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseMoved(int x, int y ){
-    if( isDragingMarkerPosition ){
-        position = ofPoint( x , y );
-        if( ( position + selectionSize ).x > ofGetWidth() )
-            selectionSize.x -= ( position + selectionSize ).x - ofGetWidth();
-        if( ( position + selectionSize ).y > ofGetHeight() )
-            selectionSize.y -= ( position + selectionSize ).y - ofGetHeight();
-    }
-    if( isDragingMarkerSize )
-        if( x > position.x + markerRadius && y > position.y + markerRadius )
-            selectionSize = ofPoint( x , y ) - position;
+    marker.mouseMoved(x,  y );
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseDragged(int x, int y, int button){
-    if( isDragingMarkerPosition ){
-        position = ofPoint( x , y );
-        if( ( position + selectionSize ).x > ofGetWidth() )
-            selectionSize.x -= ( position + selectionSize ).x - ofGetWidth();
-        if( ( position + selectionSize ).y > ofGetHeight() )
-            selectionSize.y -= ( position + selectionSize ).y - ofGetHeight();
-    }
-    if( isDragingMarkerSize )
-        if( x > position.x + markerRadius && y > position.y + markerRadius )
-            selectionSize = ofPoint( x , y ) - position;
+    marker.mouseDragged( x, y, button);
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mousePressed(int x, int y, int button){
-    if( ( ofPoint( x , y ) - position ).length() < markerRadius / 2  && button == 0 )
-        isDragingMarkerPosition = true;
-    if( ( ofPoint( x , y ) - (position + selectionSize ) ).length() < markerRadius / 2  && button == 0 )
-        isDragingMarkerSize = true;
-    isJustRelese = false;
+    marker.mousePressed( x,  y,  button);
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseReleased(int x, int y, int button){
-    if( isDragingMarkerPosition ){
-        isDragingMarkerPosition = false;
-        isJustRelese = true;
-    }
-    if( isDragingMarkerSize ){
-        isDragingMarkerSize = false;
-        isJustRelese = true;
+    marker.mouseReleased( x,  y,  button);
+    if(marker.isBeenResized() ){
+        selectionFormBackgoundImage->clear();
+        selectionFormBackgoundImage->allocate( retinalFactor * marker.getSize().x, retinalFactor *  marker.getSize().y, OF_IMAGE_COLOR_ALPHA);
     }
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::windowResized(int w, int h){
+    marker.windowResized( w,  h);
 }
+//--------------------------------------------------------------
+unsigned char* ofxScreenSelector::getPixels(){
+    return selectionFormBackgoundImage->getPixels();
+}
+//--------------------------------------------------------------
+ofPoint ofxScreenSelector::getSize(){
+    return ofPoint( selectionFormBackgoundImage->width , selectionFormBackgoundImage->height );
+}
+//--------------------------------------------------------------
+ofImage* ofxScreenSelector::getImage(){
+    return selectionFormBackgoundImage;
+}
+
+
+
+
+
+
+

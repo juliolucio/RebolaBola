@@ -21,5 +21,6 @@ public:
     std::vector<ofxNeoPixelLedArc*> arcs;
     float deltaAngleArcToArc;
     float radius;
+    
     ofxProjectableImage* projectableImage;
 };

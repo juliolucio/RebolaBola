@@ -1,34 +1,25 @@
 #pragma once
 #include "ofMain.h"
 #include "ofxGui.h"
-#include "ofArduino.h"
+
 #include "ofxScreenSelector.h"
+#include "ofxScreenCapture.h"
+#include "ofxImagePixelator.h"
+
 #include "threadedObjecSendOutputToLedStripest.h"
 #include "threadedObjecRecieveSensorReadings.h"
+
 #include "ofxNeoPixelLedSphere.h"
+#include "ofxNeoPixelLedArc.h"
+#include "ofxNeoPixelLed.h"
 #include "ofxProjectableImage.h"
 
 class ofApp : public ofBaseApp{
     
 public:
-    typedef enum {  CAPTURE_FROM_IMAGE_FILE,
-                    CAPTURE_FROM_SCREEN,
-                    CAPTURE_FROM_VIDEO_FILE,
-                    CAPTURE_FROM_CAMERA } captuteTypes;
-    
     void setup();
-    
-    void setupGuiInput();
-    void setupGuiDebug();
-    void setupGuiOutput();
-    void openChildApp();
     void update();
-    void drawOutput( int x , int y, int width , int height );
-    void drawInputResul( int x , int y, int width , int height );
-
-    void drawLastColum( int x , int y , int stripeIndex );
     void draw();
-    
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
@@ -39,61 +30,40 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    ofImage  imageFromFile;
+private:
+    
+    //properties
+    typedef enum {  CAPTURE_FROM_IMAGE_FILE,
+        CAPTURE_FROM_SCREEN,
+        CAPTURE_FROM_VIDEO_FILE,
+        CAPTURE_FROM_CAMERA } captuteTypes;
+    captuteTypes captureType;
+    
+    bool isRetina;
+    int numPixels;
+    
+    ofxScreenCapture backgroudCapture;
+    
+    ofImage* imageInput;
+    ofImage* imageOutput;
+    
     ofVideoPlayer video;
     ofVideoGrabber camera;
     
-    ofxScreenSelector selector;
-    bool retina;
-    int rx;
+    ofxScreenSelector screenSelectionCapture;
     
-    vector<ofColor> colorsStrip02;
-
-    ofImage screenBackground;
-    ofImage inputImageResult;
-    ofImage	output;
-    
-    int captureWidth;
-    int captureHeight;
-    
-    int outputWidth;
-    int outputHeight;
-    
-    int updateIndex;
-    captuteTypes captureType;
+    ofxImagePixelator* pixelator;
     
     int microsecondsBetwenLineUpdate;
     
-    int numPixelsCapturePerOutputWidth;
-    int numPixelsCapturePerOutputHeight;
-    
-    unsigned char* pixelsOutput;
-    unsigned char* pixelsOutputProjected;
-    
-    void setCaptureType( captuteTypes type  , string fileName );
-    
-    void changedColumDrawingDelay( int & lineRate );
-    void setInputModeImage();
-    void setInputModeVideo();
-    void setInputModeCamera();
-    void setInputModeScreen();
-    
-    void processOpenFileImage( ofFileDialogResult openFileResult );
-    void processOpenFileVideo( ofFileDialogResult openFileResult );
-    
-    void resetSizes();
-    void updateImageInput();
-    void updateImageBackground();
-    void updateImageOutput();
-    void updateImageOutputProjection(int numPixelsPerRevolution , int numrepetitions );
-    
-    unsigned long long lastUpdateTime;
+    ThreadedObjecSendOutputToLedStripest threadLedSender;
+    threadedObjecRecieveSensorReadings threadSensorReciver;
 
+    ofxProjectableImage* projectableImage;
     
-    ofArduino arduino;
-
     unsigned long long lastTimerUserInteracted;
-
+    
+    //gui
     //panel input
     ofxPanel guiInput;
     ofxButton butonImage;
@@ -117,10 +87,31 @@ public:
     ofxToggle isUpdatingStripe02;
     ofxPanel guiOutput;
     
-    ThreadedObjecSendOutputToLedStripest threadLedSender;
-    threadedObjecRecieveSensorReadings threadSensorReciver;
+    void setCaptureType( captuteTypes type  , string fileName );
+    void setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal );
+    void updateTests();
     
-    ofxNeoPixelLedSphere sphere;
-    ofxProjectableImage* projectableImage;
+    //drawing
+    void drawOutput( int x , int y, int width , int height );
+    void drawInputResul( int x , int y, int width , int height );
+    void drawLastColum( int x , int y , int stripeIndex );
+    
+    //gui
+    void setupGuiInput();
+    void setupGuiDebug();
+    void setupGuiOutput();
+    
+    void changedColumDrawingDelay( int & lineRate );
+    
+    void setInputModeImage();
+    void setInputModeVideo();
+    void setInputModeCamera();
+    void setInputModeScreen();
+    
+    void processOpenFileImage( ofFileDialogResult openFileResult );
+    void processOpenFileVideo( ofFileDialogResult openFileResult );
+
+   
+    
     
 };
