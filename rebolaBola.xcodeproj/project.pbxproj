@@ -131,6 +131,11 @@
 		89318E031B9D116C002C9D88 /* threadedObjecSendOutputToLedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedImage.h; sourceTree = "<group>"; };
 		89318E041B9D116C002C9D88 /* threadedObjecSendOutputToLedStripe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripe.h; sourceTree = "<group>"; };
 		89318E051B9D12F2002C9D88 /* threadedObjecSendOutputToLedStripest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripest.h; sourceTree = "<group>"; };
+		89318E061B9D13B5002C9D88 /* colors.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = colors.jpg; path = bin/data/colors.jpg; sourceTree = "<group>"; };
+		89318E071B9D13B5002C9D88 /* fcserver */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fcserver; path = bin/data/fcserver; sourceTree = "<group>"; };
+		89318E081B9D13B5002C9D88 /* image01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = image01.png; path = bin/data/image01.png; sourceTree = "<group>"; };
+		89318E091B9D13B5002C9D88 /* pano.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = pano.jpeg; path = bin/data/pano.jpeg; sourceTree = "<group>"; };
+		89318E0A1B9D13B5002C9D88 /* video01.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = video01.mov; path = bin/data/video01.mov; sourceTree = "<group>"; };
 		8942EE8F1B7FEC8300016FA2 /* macGlutfix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macGlutfix.h; sourceTree = "<group>"; };
 		8942EE901B7FEC8300016FA2 /* macGlutfix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = macGlutfix.m; sourceTree = "<group>"; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
@@ -311,6 +316,11 @@
 		895067321B83F4F1000E0E1E /* data */ = {
 			isa = PBXGroup;
 			children = (
+				89318E061B9D13B5002C9D88 /* colors.jpg */,
+				89318E071B9D13B5002C9D88 /* fcserver */,
+				89318E081B9D13B5002C9D88 /* image01.png */,
+				89318E091B9D13B5002C9D88 /* pano.jpeg */,
+				89318E0A1B9D13B5002C9D88 /* video01.mov */,
 				895067331B83F4FC000E0E1E /* settingsDebug.xml */,
 				895067341B83F4FC000E0E1E /* settingsInput.xml */,
 				895067351B83F4FC000E0E1E /* settingsOutput.xml */,
