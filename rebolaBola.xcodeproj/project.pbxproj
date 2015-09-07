@@ -123,12 +123,14 @@
 		816E70342F632EF471F614A4 /* NeoPixelStrip.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; lineEnding = 0; name = NeoPixelStrip.h; path = ../../../addons/ofxOPC/src/NeoPixelStrip.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		882A50CA5733B8DA2A7DAF27 /* NeoPixelShield5x8.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; lineEnding = 0; name = NeoPixelShield5x8.h; path = ../../../addons/ofxOPC/src/NeoPixelShield5x8.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		890C651F1B8C048D00382E66 /* threadedObjecSendOutputToLedStripest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripest.h; sourceTree = "<group>"; };
 		892B88061B97D6C0007A2E9E /* ofxScreenSelectorMarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxScreenSelectorMarker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		892B88071B97D6C0007A2E9E /* ofxScreenSelectorMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxScreenSelectorMarker.h; sourceTree = "<group>"; };
 		892B88091B97DA94007A2E9E /* ofxScreenCapture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxScreenCapture.cpp; sourceTree = "<group>"; };
 		892B880A1B97DA94007A2E9E /* ofxScreenCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxScreenCapture.h; sourceTree = "<group>"; };
 		892B880C1B97E00C007A2E9E /* ofAppGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofAppGUI.cpp; sourceTree = "<group>"; };
+		89318E031B9D116C002C9D88 /* threadedObjecSendOutputToLedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedImage.h; sourceTree = "<group>"; };
+		89318E041B9D116C002C9D88 /* threadedObjecSendOutputToLedStripe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripe.h; sourceTree = "<group>"; };
+		89318E051B9D12F2002C9D88 /* threadedObjecSendOutputToLedStripest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripest.h; sourceTree = "<group>"; };
 		8942EE8F1B7FEC8300016FA2 /* macGlutfix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macGlutfix.h; sourceTree = "<group>"; };
 		8942EE901B7FEC8300016FA2 /* macGlutfix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = macGlutfix.m; sourceTree = "<group>"; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
@@ -430,8 +432,10 @@
 				8968EEB41B0A9DFD00864060 /* ofApp.h */,
 				8968EEB31B0A9DFD00864060 /* ofApp.cpp */,
 				892B880C1B97E00C007A2E9E /* ofAppGUI.cpp */,
-				890C651F1B8C048D00382E66 /* threadedObjecSendOutputToLedStripest.h */,
 				89D6C4821B94E638002E77D8 /* threadedObjecRecieveSensorReadings.h */,
+				89318E031B9D116C002C9D88 /* threadedObjecSendOutputToLedImage.h */,
+				89318E041B9D116C002C9D88 /* threadedObjecSendOutputToLedStripe.h */,
+				89318E051B9D12F2002C9D88 /* threadedObjecSendOutputToLedStripest.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

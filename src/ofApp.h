@@ -6,7 +6,7 @@
 #include "ofxScreenCapture.h"
 #include "ofxImagePixelator.h"
 
-#include "threadedObjecSendOutputToLedStripest.h"
+#include "threadedObjecSendOutputToLedStripe.h"
 #include "threadedObjecRecieveSensorReadings.h"
 
 #include "ofxNeoPixelLedSphere.h"
@@ -56,7 +56,7 @@ private:
     
     int microsecondsBetwenLineUpdate;
     
-    ThreadedObjecSendOutputToLedStripest threadLedSender;
+    ThreadedObjecSendOutputToLedStripe threadLedSender;
     threadedObjecRecieveSensorReadings threadSensorReciver;
 
     ofxProjectableImage* projectableImage;

@@ -1,8 +1,3 @@
-
-
-
-
-
 #include <Cocoa/Cocoa.h>
 #include <AppKit/NSOpenGL.h>
 #include "macGlutfix.h"
