@@ -48,37 +48,40 @@ void ofApp::update(){
     
         case CAPTURE_FROM_VIDEO_FILE:
             video.update();
+            imageInput->setFromPixels( video.getPixels() , video.width, video.height, OF_IMAGE_COLOR );
             break;
     
         case CAPTURE_FROM_CAMERA:
             camera.update();
-            break;
-            
-        default:
+            imageInput->setFromPixels( camera.getPixels() , camera.width , camera.height, OF_IMAGE_COLOR );
             break;
     }
-    screenSelectionCapture.update();
+
     pixelator->update();
     imageOutput = pixelator->getOutputImage();
     
-    
     float angleTeta = threadSensorReciver.getAngleBetta();
-
     angleTeta = angleTeta * PI / 180;
-    cout << " angle = " << angleTeta << "\n";
-    projectableImage->updateAngleTeta( angleTeta );
-    projectableImage->setImage( imageInput );
-    projectableImage->updateSphereColor();
-    std::vector<ofColor> stripe;
-    ofxNeoPixelLedArc* tempArc = projectableImage->sphere->arcs[0];
-    for( int i = 0 ; i < tempArc->leds.size() ; i ++ )
-        stripe.push_back(  tempArc->leds[i]->currentColor );
-    threadLedSender.setOutputStripe01( stripe );
+    //cout << " angle = " << angleTeta << "\n";
+    
+    projectableImage->setImageInput( imageInput );
+    projectableImage->update( angleTeta );
+    
+    std::vector<ofColor> stripe01;
+    std::vector<ofColor> stripe02;
+    
+    for( int l = 0 ; l < numPixels ; l ++ ){
+        stripe01.push_back( projectableImage->getSpherePixelColorFromIndexAndArc( 0 , l ) );
+        stripe02.push_back( projectableImage->getSpherePixelColorFromIndexAndArc( 1 , l ) );
+    }
+    
+    threadLedSender.setOutputStripe01( stripe01 );
+    threadLedSender.setOutputStripe02( stripe02 );
 }
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){
     captureType = type;
-    video.close();
+
     imageInput->clear();
     switch (captureType) {
         case CAPTURE_FROM_IMAGE_FILE:
@@ -89,7 +92,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
             break;
             
         case CAPTURE_FROM_SCREEN:
-            imageInput->allocate( screenSelectionCapture.getSize().x , screenSelectionCapture.getSize().y , OF_IMAGE_COLOR );
+            imageInput = screenSelectionCapture.getImage();
             break;
 
         case CAPTURE_FROM_VIDEO_FILE:
@@ -98,7 +101,6 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
                 break;
             }
             imageInput->allocate( video.width , video.height, OF_IMAGE_COLOR );
-            imageInput->setFromPixels( video.getPixels() , video.width , video.height, OF_IMAGE_COLOR );
             video.play();
             break;
             
@@ -107,21 +109,16 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
                 cout << "**error: camera not found\n";
                 break;
             }
-            imageInput->allocate( video.width , video.height, OF_IMAGE_COLOR );
-            imageInput->setFromPixels( camera.getPixels() , camera.width , camera.height, OF_IMAGE_COLOR );
+            imageInput->allocate( camera.width , camera.height, OF_IMAGE_COLOR );
             break;
     }
+    
     pixelator->setImage( imageInput , numPixels , isRetina );
     cout << " setting capture mode to  " <<  captureType << "\n";
 }
 //--------------------------------------------------------------
     void ofApp::setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal ){
-//    ofVec3f position = ofVec3f( 1 , 0 , 0 );
-//    ofVec3f normal = ofVec3f( -1 , 0 , 0 );
-
     projectableImage->setup();
-    //threadLedSender.setOutputSize( ofPoint( imageOutput->width , imageOutput->height ) );
-    
     cout    << "Reseting sizes capture mode to  " <<  captureType << "\n"
     << "\tcapture width = " <<  imageOutput->width << "," << "\n"
     << "\tcapture height = " <<  imageOutput->height << "\n" << "\n";
@@ -248,11 +245,9 @@ void ofApp::draw(){
     if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
         drawOutput( 550 , 20 , imageOutput->width , imageOutput->height );
         drawInputResul( 550 , 100 , imageInput->width , imageInput->height );
-        pixelator->draw();
         guiInput.draw();
         guiDebug.draw();
         guiOutput.draw();
-        //projectableImage->draw( 200 , 200 );
         
         drawLastColum( 0 , 0 , 0 );
         

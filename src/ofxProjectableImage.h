@@ -9,8 +9,7 @@ class ofxProjectableImage {
 public:
     ofxProjectableImage();
     void setup();
-    void setImage( ofImage* &theInputImage );
-    void updateAngleTeta(float theAngleTeta);
+    void update( float theAngleTeta );
     void draw(int x , int y);
     void mouseMoved(int x, int y );
     void mouseDragged(int x, int y, int button);
@@ -18,14 +17,21 @@ public:
     void mouseReleased(int x, int y, int button);
     void windowResized(int w, int h);
     
-    void updateSphereColor();
-    ofImage* getImage();
+    void setImageInput( ofImage* &theInputImage );
+    int getNumArcs();
+    int getNumPixelsPerArc();
+    ofColor getSpherePixelColorFromIndexAndArc( int indexArc , int indexPixel );
     
-    ofImage* image;
+private:
+    void updateAngleTeta(float theAngleTeta);
+    void updateSphereColor();
+    
+    ofImage* imageInput;
+    
     float spatialWidth;
     float spatialHeight;
     
     float imageDistance;
     
-    ofxNeoPixelLedSphere* sphere;
+    ofxNeoPixelLedSphere sphere;
 };

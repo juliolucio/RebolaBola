@@ -7,9 +7,9 @@ class ofxNeoPixelLedArc {
     
 public:
     ofxNeoPixelLedArc();
-    void setup(  int theNumLeds , float theRadius );
+    ~ofxNeoPixelLedArc();
+    void setup(  int theNumLeds );
     void update( float theAngleTeta );
-    void projectImage( ofxProjectableImage* theProjectableImage );
     void draw();
     void mouseMoved(int x, int y );
     void mouseDragged(int x, int y, int button);
@@ -17,8 +17,9 @@ public:
     void mouseReleased(int x, int y, int button);
     void windowResized(int w, int h);
     
+    void clear();
+    
     float angleTeta;
     std::vector<ofxNeoPixelLed*> leds;
-    float radius;
-    ofxProjectableImage* projectableImage;
+
  };

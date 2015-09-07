@@ -23,5 +23,4 @@ private:
     ofImage* selectionFormBackgoundImage;
     bool isRetinaScreen;
     int retinalFactor;
-
 };

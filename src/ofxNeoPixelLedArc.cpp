@@ -5,8 +5,11 @@
 ofxNeoPixelLedArc::ofxNeoPixelLedArc(){
 }
 //--------------------------------------------------------------
-void ofxNeoPixelLedArc::setup( int theNumleds , float theRadius ){
-    radius = theRadius;
+ofxNeoPixelLedArc::~ofxNeoPixelLedArc(){
+    clear();
+}
+//--------------------------------------------------------------
+void ofxNeoPixelLedArc::setup( int theNumleds  ){
     float deltaFi =  PI / float( theNumleds + 2 );
     float piMedios = PI / 2.0;
     for( int l = 0 ; l < theNumleds ; l ++ ){
@@ -23,17 +26,10 @@ void ofxNeoPixelLedArc::update( float theAngleTeta ){
         leds[ l ]->update( theAngleTeta );
 }
 //--------------------------------------------------------------
-void ofxNeoPixelLedArc::projectImage( ofxProjectableImage* theProjectableImage ){
-    projectableImage = theProjectableImage;
-    for( int l = 0 ; l < leds.size() ; l ++ )
-        leds[ l ]->projectImage( projectableImage );
-}
-//--------------------------------------------------------------
 void ofxNeoPixelLedArc::draw(){
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::mouseMoved(int x, int y ){
-   
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::mouseDragged(int x, int y, int button){
@@ -46,4 +42,10 @@ void ofxNeoPixelLedArc::mouseReleased(int x, int y, int button){
 }
 //--------------------------------------------------------------
 void ofxNeoPixelLedArc::windowResized(int w, int h){
+}
+//--------------------------------------------------------------
+void ofxNeoPixelLedArc::clear(){
+    for( int l = 0 ; l < leds.size() ; l ++ )
+        delete leds[ l ];
+    leds.clear();
 }

@@ -20,6 +20,7 @@ private:
    // unsigned long long lastTimeSendtripe02;
     
     std::vector<ofColor> colorsStripe01;
+    std::vector<ofColor> colorsStripe02;
 
 //    void tryToSendColumnToStripe01(){
 //        unsigned long long delta = ofGetElapsedTimeMicros() - lastTimeSendtripe01;
@@ -122,6 +123,18 @@ public:
     void setOutputStripe01( std::vector<ofColor> &theColorStripe){
         if(lock()){
             colorsStripe01 = theColorStripe;
+            //cout << colorsStripe01[31];
+            unlock();
+        }
+        
+        else{
+            cout << "setOutputImage()" << "Unable to lock mutex." << "\n";
+        }
+    }
+    
+    void setOutputStripe02( std::vector<ofColor> &theColorStripe){
+        if(lock()){
+            colorsStripe02 = theColorStripe;
             //cout << colorsStripe01[31];
             unlock();
         }

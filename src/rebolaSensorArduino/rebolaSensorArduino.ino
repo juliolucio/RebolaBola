@@ -33,7 +33,7 @@ void loop(void){
     Serial.print( " " );
     Serial.print( vector.z() );
     Serial.print( "b" );
-    Serial.println();
+    //Serial.println();
     //Serial.println();
      delay(BNO055_SAMPLERATE_DELAY_MS);
 }

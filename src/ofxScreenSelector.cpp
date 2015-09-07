@@ -48,7 +48,6 @@ void ofxScreenSelector::update(){
 //--------------------------------------------------------------
 void ofxScreenSelector::draw(){
     marker.draw();
-    selectionFormBackgoundImage->draw( 200 , 50 );
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::mouseMoved(int x, int y ){
@@ -86,8 +85,6 @@ ofPoint ofxScreenSelector::getSize(){
 ofImage* ofxScreenSelector::getImage(){
     return selectionFormBackgoundImage;
 }
-
-
 
 
 

@@ -10,10 +10,7 @@ void ofxImagePixelator::setImage( ofImage* theInputImage , int theOutputHeight ,
         cout << "not seted up pixelator" << "\n";
         return;
     }
-
-    
     inputImage = theInputImage;
-    
     proportions = float(inputImage->width) / float(inputImage->height);
     if( !outputImage )
         outputImage = new ofImage();
@@ -26,10 +23,17 @@ void ofxImagePixelator::setImage( ofImage* theInputImage , int theOutputHeight ,
     numPixelsInputPerPixelsOutput.y = inputImage->height - numPixelsInputPerPixelsOutputRest.y;
     
     pixelDensity.x = ( numPixelsInputPerPixelsOutput.x ) / outputImage->width ;
-    pixelDensity.y = ( numPixelsInputPerPixelsOutput.y ) / outputImage->height ;
+    pixelDensity.y = ( numPixelsInputPerPixelsOutput.y ) / outputImage->height;
+    imageInputSizePrevious = ofPoint( inputImage->width , inputImage->height );
 }
 //--------------------------------------------------------------
 void ofxImagePixelator::update(){
+    if( imageInputSizePrevious.x  != inputImage->width ||  imageInputSizePrevious.x != inputImage->height ){
+        proportions = float(inputImage->width) / float(inputImage->height);
+        int prevOutputHeight = outputImage->height;
+        outputImage->clear();
+        outputImage->allocate( prevOutputHeight * proportions , prevOutputHeight ,  OF_IMAGE_COLOR );
+    }
     for( int y = 0 ; y <  outputImage->height  ; y ++){
         for( int x = 0 ; x < outputImage->width  ; x ++){
             ofPoint positioFirstPixel;

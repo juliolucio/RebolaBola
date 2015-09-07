@@ -25,4 +25,6 @@ private:
     ofImage* inputImage;
     ofImage* outputImage;
     
+    ofPoint imageInputSizePrevious;
+    
 };
