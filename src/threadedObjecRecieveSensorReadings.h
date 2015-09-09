@@ -11,9 +11,9 @@ private:
     bool foundEnd;
     
 protected:
-    float angleAlpha;
-    float angleBeta;
-    float angleGamma;
+    double angleAlpha;
+    double angleBeta;
+    double angleGamma;
     
 private:
     void recieveMessages( ){
@@ -48,9 +48,9 @@ private:
             std::istream_iterator<std::string> end;
             std::vector<std::string> vstrings(begin, end);
             if( vstrings.size() == 3 ){
-                angleAlpha = ofToFloat( vstrings[0] );
-                angleBeta = ofToFloat( vstrings[1] );
-                angleGamma = ofToFloat( vstrings[2] );
+                angleAlpha = ofToDouble( vstrings[0] );
+                angleBeta = ofToDouble( vstrings[1] );
+                angleGamma = ofToDouble( vstrings[2] );
              }
         }
     }
@@ -98,15 +98,15 @@ public:
         }
     }
     
-    float getAngleAlpha(){
+    double getAngleAlpha(){
         ofScopedLock lock(mutex);
         return angleAlpha;
     }
-    float getAngleBetta(){
+    double getAngleBeta(){
         ofScopedLock lock(mutex);
         return angleBeta;
     }
-    float getAngleGamma(){
+    double getAngleGamma(){
         ofScopedLock lock(mutex);
         return angleGamma;
     }
