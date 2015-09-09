@@ -35,39 +35,36 @@ void ofApp::setupGuiOutput(){
     guiOutput.add( isUpdatingStripe01.setup("Draw Stripe 01" , false ) );
     guiOutput.add( isUpdatingStripe02.setup("Draw Stripe 02" , false ) );
     guiOutput.loadFromFile("settingsOutput.xml");
-    guiOutput.add( columDrawingDelay.setup("micros btwen colum ", 100 , 1 , 4000 ) );
-    columDrawingDelay.addListener(this, &ofApp::changedColumDrawingDelay );
-}
-//--------------------------------------------------------------
-void ofApp::changedColumDrawingDelay( int & columDrawingDelayRate ){
-    microsecondsBetwenLineUpdate = columDrawingDelayRate;
-    //threadLedSender.setOutputColumDelay( microsecondsBetwenLineUpdate );
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeImage(){
-    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a image ");
-    if (openFileResult.bSuccess){
-        ofLogVerbose("User selected a file");
-        processOpenFileImage( openFileResult );
-    }
-    else
-        ofLogVerbose("User hit cancel");
+    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienY.png" );
+//  ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a image ");
+//    if (openFileResult.bSuccess){
+//        ofLogVerbose("User selected a file");
+//        processOpenFileImage( openFileResult );
+//    }
+//    else
+//        ofLogVerbose("User hit cancel");
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeVideo(){
-    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a video file");
-    if (openFileResult.bSuccess){
-        ofLogVerbose("User selected a file");
-        processOpenFileVideo( openFileResult );
-    }
-    else
-        ofLogVerbose("User hit cancel");
+   setCaptureType( CAPTURE_FROM_VIDEO_FILE , "video01.mov" );
+//    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a video file");
+//    if (openFileResult.bSuccess){
+//        ofLogVerbose("User selected a file");
+//        processOpenFileVideo( openFileResult );
+//    }
+//    else
+//        ofLogVerbose("User hit cancel");
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeCamera(){
+    setCaptureType( CAPTURE_FROM_CAMERA , ":)" );
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeScreen(){
+    setCaptureType( CAPTURE_FROM_SCREEN , ":)" );
 }
 //--------------------------------------------------------------
 void ofApp::processOpenFileImage(ofFileDialogResult openFileResult){

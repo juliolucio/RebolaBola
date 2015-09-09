@@ -6,8 +6,7 @@
 #include "ofxScreenCapture.h"
 #include "ofxImagePixelator.h"
 
-#include "threadedObjecSendOutputToLedStripe.h"
-#include "threadedObjecRecieveSensorReadings.h"
+#include "threadedObjecSendOutputToLedImage.h"
 
 #include "ofxNeoPixelLedSphere.h"
 #include "ofxNeoPixelLedArc.h"
@@ -33,7 +32,8 @@ public:
 private:
     
     //properties
-    typedef enum {  CAPTURE_FROM_IMAGE_FILE,
+    typedef enum {  CAPTURE_UNSET,
+        CAPTURE_FROM_IMAGE_FILE,
         CAPTURE_FROM_SCREEN,
         CAPTURE_FROM_VIDEO_FILE,
         CAPTURE_FROM_CAMERA } captuteTypes;
@@ -56,8 +56,8 @@ private:
     
     int microsecondsBetwenLineUpdate;
     
-    ThreadedObjecSendOutputToLedStripe threadLedSender;
-    threadedObjecRecieveSensorReadings threadSensorReciver;
+    ThreadedObjecSendOutputToLedImage threadLedSender;
+    ThreadedObjecRecieveSensorReadings* threadSensorReciver;
 
     ofxProjectableImage* projectableImage;
     
@@ -88,13 +88,14 @@ private:
     ofxPanel guiOutput;
     
     void setCaptureType( captuteTypes type  , string fileName );
-    void setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal );
+//    void setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal );
     void updateTests();
+    void updateGammaAndAtenuation();
     
     //drawing
-    void drawOutput( int x , int y, int width , int height );
-    void drawInputResul( int x , int y, int width , int height );
-    void drawLastColum( int x , int y , int stripeIndex );
+    void drawOutput( int x , int y);
+    void drawInput( int x , int y );
+    void drawLastColum( int x , int y , int widthFactor );
     
     //gui
     void setupGuiInput();

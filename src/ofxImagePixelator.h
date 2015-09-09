@@ -5,7 +5,7 @@ class ofxImagePixelator {
     
 public:
     ofxImagePixelator();
-    void setImage( ofImage* theInputImage ,int theOutputHeight , bool theIsRetinal );
+    void setImage( ofImage* theInputImage ,int theOutputHeight );
     void update();
     void draw();
     void mouseMoved(int x, int y );
@@ -14,17 +14,18 @@ public:
     void mouseReleased(int x, int y, int button);
     void windowResized(int w, int h);
     
-    ofPoint getCapureSize();
     unsigned char* getOutputPixels();
     ofImage* getOutputImage();
 
 private:
     float proportions;
-    ofPoint numPixelsInputPerPixelsOutput;
     ofPoint pixelDensity;
     ofImage* inputImage;
     ofImage* outputImage;
     
     ofPoint imageInputSizePrevious;
     
+    void recalculateOutpuSize( int theOutputHeight );
+    void updateOutputImage();
+  
 };

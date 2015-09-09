@@ -2,7 +2,7 @@
 
 #include "ofThread.h"
 
-class threadedObjecRecieveSensorReadings: public ofThread{
+class ThreadedObjecRecieveSensorReadings: public ofThread{
 private:
     ofSerial*       serialToArduino;
     string          recieved;
@@ -25,6 +25,7 @@ private:
             byteReaded = serialToArduino->readByte();
             if( byteReaded == 'a'){
                 foundBegining = true;
+                //cout << "begin : ";
                 while( !foundEnd ){
                     if( serialToArduino->available() ){
                         byteReaded = serialToArduino->readByte();
@@ -33,6 +34,7 @@ private:
                                 recieved += byteReaded;
                             else if( byteReaded == 'b' ){
                                 foundEnd = true;
+                                //cout << "  end\n";
                                 break;
                             }
                         }
@@ -41,7 +43,6 @@ private:
             }
         }
         if( foundBegining && foundEnd  ){
-            
             std::stringstream ss(recieved);
             std::istream_iterator<std::string> begin(ss);
             std::istream_iterator<std::string> end;
@@ -56,7 +57,7 @@ private:
     
     
 public:
-    threadedObjecRecieveSensorReadings() {
+    ThreadedObjecRecieveSensorReadings() {
     }
     
     void setup( std::string serialPort , int sppedInBauds ){
@@ -64,6 +65,14 @@ public:
         serialToArduino->listDevices();
         vector <ofSerialDeviceInfo> deviceList = serialToArduino->getDeviceList();
         serialToArduino->setup(serialPort , sppedInBauds); //open the first device
+    }
+    
+    bool isConectedToSensor(){
+        ofScopedLock lock(mutex);
+            if( serialToArduino->isInitialized() )
+                return true;
+        return false;
+        
     }
     
     void start(){
@@ -77,10 +86,11 @@ public:
     void threadedFunction(){
         while( isThreadRunning() ){
             if(lock()){
-                if( serialToArduino->isInitialized() ){
+                if( serialToArduino->isInitialized() )
                 recieveMessages();
+                //sleep(1);
                 //cout << "euler = ( " << angleAlpha << " , " << angleBeta << " , " << angleGamma << " ) " << "\n";
-                }
+                
                 unlock();
             }
             else

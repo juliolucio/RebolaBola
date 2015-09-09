@@ -123,8 +123,8 @@
 		816E70342F632EF471F614A4 /* NeoPixelStrip.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; lineEnding = 0; name = NeoPixelStrip.h; path = ../../../addons/ofxOPC/src/NeoPixelStrip.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		882A50CA5733B8DA2A7DAF27 /* NeoPixelShield5x8.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; lineEnding = 0; name = NeoPixelShield5x8.h; path = ../../../addons/ofxOPC/src/NeoPixelShield5x8.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		892ABE691B9F716F008F76EC /* ThreadedObjecSendOutputToLedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadedObjecSendOutputToLedImage.h; sourceTree = "<group>"; };
-		892ABE6A1B9F71CD008F76EC /* ThreadedObjecRecieveSensorReadings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadedObjecRecieveSensorReadings.h; sourceTree = "<group>"; };
+		892ABE691B9F716F008F76EC /* threadedObjecSendOutputToLedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedImage.h; sourceTree = "<group>"; };
+		892ABE6A1B9F71CD008F76EC /* threadedObjecRecieveSensorReadings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = threadedObjecRecieveSensorReadings.h; sourceTree = "<group>"; };
 		892B88061B97D6C0007A2E9E /* ofxScreenSelectorMarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxScreenSelectorMarker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		892B88071B97D6C0007A2E9E /* ofxScreenSelectorMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxScreenSelectorMarker.h; sourceTree = "<group>"; };
 		892B88091B97DA94007A2E9E /* ofxScreenCapture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxScreenCapture.cpp; sourceTree = "<group>"; };
@@ -154,6 +154,8 @@
 		8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLed.cpp; sourceTree = "<group>"; };
 		8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLed.h; sourceTree = "<group>"; };
 		899F027F1B9546DC00297DB1 /* rebolaSensorArduino */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensorArduino; sourceTree = "<group>"; };
+		89D5ED701BA0A02E00883FDF /* colorGradienX.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienX.png; path = bin/data/colorGradienX.png; sourceTree = "<group>"; };
+		89D5ED711BA0A02E00883FDF /* colorGradienY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienY.png; path = bin/data/colorGradienY.png; sourceTree = "<group>"; };
 		89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxProjectableImage.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		89D6C47F1B94C666002E77D8 /* ofxProjectableImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxProjectableImage.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		89E8D7551B82817600B26AED /* ofxScreenSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxScreenSelector.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -322,6 +324,8 @@
 				895067331B83F4FC000E0E1E /* settingsDebug.xml */,
 				895067341B83F4FC000E0E1E /* settingsInput.xml */,
 				895067351B83F4FC000E0E1E /* settingsOutput.xml */,
+				89D5ED701BA0A02E00883FDF /* colorGradienX.png */,
+				89D5ED711BA0A02E00883FDF /* colorGradienY.png */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -440,8 +444,8 @@
 				8968EEB41B0A9DFD00864060 /* ofApp.h */,
 				8968EEB31B0A9DFD00864060 /* ofApp.cpp */,
 				892B880C1B97E00C007A2E9E /* ofAppGUI.cpp */,
-				892ABE6A1B9F71CD008F76EC /* ThreadedObjecRecieveSensorReadings.h */,
-				892ABE691B9F716F008F76EC /* ThreadedObjecSendOutputToLedImage.h */,
+				892ABE6A1B9F71CD008F76EC /* threadedObjecRecieveSensorReadings.h */,
+				892ABE691B9F716F008F76EC /* threadedObjecSendOutputToLedImage.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;

@@ -19,7 +19,7 @@ void ofxScreenSelector::setup( bool theRetina , ofPoint thePosition , ofPoint th
         retinalFactor = 2;
     
     selectionFormBackgoundImage = new ofImage();
-    selectionFormBackgoundImage->allocate( retinalFactor * marker.getSize().x, retinalFactor *  marker.getSize().y, OF_IMAGE_COLOR_ALPHA);
+    selectionFormBackgoundImage->allocate( retinalFactor * marker.getSize().x, retinalFactor *  marker.getSize().y, OF_IMAGE_COLOR_ALPHA );
 }
 //--------------------------------------------------------------
 void ofxScreenSelector::update(){
