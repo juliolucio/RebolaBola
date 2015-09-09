@@ -111,6 +111,9 @@ private:
     
     void processOpenFileImage( ofFileDialogResult openFileResult );
     void processOpenFileVideo( ofFileDialogResult openFileResult );
+    
+    void setDrawingStripe01();
+    void setDrawingStripe02();
 
    
     

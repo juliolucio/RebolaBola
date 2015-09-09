@@ -91,6 +91,14 @@ void ofApp::processOpenFileVideo(ofFileDialogResult openFileResult){
             setCaptureType( CAPTURE_FROM_VIDEO_FILE , openFileResult.getPath() );
         }
     }
+}
+//--------------------------------------------------------------
+void ofApp::setDrawingStripe01(){
+    threadLedSender.setDrawingStripe01( isUpdatingStripe01 );
+}
+//--------------------------------------------------------------
+void ofApp::setDrawingStripe02( ){
+    threadLedSender.setDrawingStripe02( isUpdatingStripe02 );
     
 }
 
