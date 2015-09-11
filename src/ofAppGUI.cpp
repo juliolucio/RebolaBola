@@ -38,7 +38,7 @@ void ofApp::setupGuiOutput(){
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeImage(){
-    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienY.png" );
+    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienX.png" );
 //  ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a image ");
 //    if (openFileResult.bSuccess){
 //        ofLogVerbose("User selected a file");
@@ -49,7 +49,7 @@ void ofApp::setInputModeImage(){
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeVideo(){
-   setCaptureType( CAPTURE_FROM_VIDEO_FILE , "video01.mov" );
+   setCaptureType( CAPTURE_FROM_VIDEO_FILE , "vj.mp4" );
 //    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a video file");
 //    if (openFileResult.bSuccess){
 //        ofLogVerbose("User selected a file");

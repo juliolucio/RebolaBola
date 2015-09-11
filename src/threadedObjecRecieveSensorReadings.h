@@ -11,9 +11,9 @@ private:
     bool foundEnd;
     
 protected:
-    double angleAlpha;
-    double angleBeta;
-    double angleGamma;
+    double value01;
+    double value02;
+    double value03;
     
 private:
     void recieveMessages( ){
@@ -48,9 +48,9 @@ private:
             std::istream_iterator<std::string> end;
             std::vector<std::string> vstrings(begin, end);
             if( vstrings.size() == 3 ){
-                angleAlpha = ofToDouble( vstrings[0] );
-                angleBeta = ofToDouble( vstrings[1] );
-                angleGamma = ofToDouble( vstrings[2] );
+                value01 = 0.0174532925 * ofToDouble( vstrings[0] );
+                value02 = 0.0174532925 * ofToDouble( vstrings[1] );
+                value03 = 0.0174532925 * ofToDouble( vstrings[2] );
              }
         }
     }
@@ -88,8 +88,7 @@ public:
             if(lock()){
                 if( serialToArduino->isInitialized() )
                 recieveMessages();
-                //sleep(1);
-                //cout << "euler = ( " << angleAlpha << " , " << angleBeta << " , " << angleGamma << " ) " << "\n";
+                cout << "euler = ( " << value01 << " , " << value02 << " , " << value03 << " ) " << "\n";
                 
                 unlock();
             }
@@ -98,16 +97,16 @@ public:
         }
     }
     
-    double getAngleAlpha(){
+    double getValue01(){
         ofScopedLock lock(mutex);
-        return angleAlpha;
+        return value01;
     }
-    double getAngleBeta(){
+    double getValue02(){
         ofScopedLock lock(mutex);
-        return angleBeta;
+        return value02;
     }
-    double getAngleGamma(){
+    double getValue03(){
         ofScopedLock lock(mutex);
-        return angleGamma;
+        return value03;
     }
 };

@@ -19,7 +19,7 @@ void ofApp::setup(){
     projectableImage = new ofxProjectableImage();
     projectableImage->setup();
     
-    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienY.png" );
+    setInputModeImage();
         
     ofBackground( 0 );
     
@@ -52,7 +52,6 @@ void ofApp::update(){
                 backgroudCapture.update();
                 screenSelectionCapture.update();
                 imageInput->setFromPixels( screenSelectionCapture.getImage()->getPixels() , screenSelectionCapture.getImage()->width, screenSelectionCapture.getImage()->height, OF_IMAGE_COLOR_ALPHA );
-                
                 break;
                 
             case CAPTURE_FROM_VIDEO_FILE:
@@ -69,11 +68,13 @@ void ofApp::update(){
         imageOutput = pixelator->getOutputImage();
     }
     updateGammaAndAtenuation();
+    setDrawingStripe01();
+    setDrawingStripe02();
  }
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){
     captureType = type;
-
+    video.stop();
     imageInput->clear();
     switch (captureType) {
         case CAPTURE_UNSET:
@@ -181,13 +182,13 @@ void ofApp::updateGammaAndAtenuation(){
                 testColor.b = gammaCorrection[testColor.b];
             }
             
-            testColor.r = min( int(testColor.r) , 254 );
-            testColor.g = min( int(testColor.g), 254 );
-            testColor.b = min( int(testColor.b), 254 );
-            
-            testColor.r = max( int(testColor.r), 0 );
-            testColor.g = max( int(testColor.g), 0 );
-            testColor.b = max( int(testColor.b), 0 );
+//            testColor.r = min( int(testColor.r) , 254 );
+//            testColor.g = min( int(testColor.g), 254 );
+//            testColor.b = min( int(testColor.b), 254 );
+//            
+//            testColor.r = max( int(testColor.r), 0 );
+//            testColor.g = max( int(testColor.g), 0 );
+//            testColor.b = max( int(testColor.b), 0 );
             imageOutput->setColor( x , y , testColor );
         }
     }
@@ -278,19 +279,19 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     switch( key ){
         case '1':
-            setCaptureType( CAPTURE_FROM_IMAGE_FILE , "image01.png" );
+            setInputModeImage();
             break;
             
         case '2':
-            setCaptureType( CAPTURE_FROM_SCREEN , ":)" );
+            setInputModeVideo();
             break;
             
         case '3':
-            setCaptureType( CAPTURE_FROM_VIDEO_FILE , "video0101.mov" );
+            setInputModeCamera();
             break;
             
         case '4':
-            setCaptureType( CAPTURE_FROM_CAMERA , ":)" );
+            setInputModeScreen();
             break;
             
         default:

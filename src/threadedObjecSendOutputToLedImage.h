@@ -13,8 +13,7 @@ private:
     int indexStripe01;
     int indexStripe02;
     
-    double angle01;
-    double angle02;
+    double angle;
     
     vector<ofColor> colorsStrip01;
     vector<ofColor> colorsStrip02;
@@ -24,7 +23,12 @@ private:
             return;
         if( pixelsOutput ){
             colorsStrip01.clear();
-            int colum = ofMap( angle01 , 0.0f , -180 , 180 , outputImage->width );
+            int colum;
+            if( angle <= PI )
+                colum = ofMap( angle , 0 , PI , 0 , outputImage->width-1  );
+            else
+                colum = ofMap( angle , PI , 2.0 * PI ,  outputImage->width-1 , 0 );
+            
             for( int pixel = 0 ; pixel < outputImage->height ; pixel ++ ){
                 int pixelIndex =  outputImage->width * pixel + colum;
                 ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,
@@ -42,7 +46,15 @@ private:
             return;
         if( pixelsOutput ){
             colorsStrip02.clear();
-            int colum = ofMap( angle02 , 0 , 360.0f , 0 , outputImage->width );
+            int colum;
+            double angle2 = angle + PI;
+            if( angle2 >= 2 * PI )
+                angle2 = fmod( angle2 , 2.0 * PI );
+            if( angle2 <= PI )
+                colum = ofMap( angle2 , 0 , PI , 0 , outputImage->width-1  );
+            else
+                colum = ofMap( angle2 , PI , 2.0 * PI ,  outputImage->width-1 , 0 );
+
             for( int pixel = 0 ; pixel < outputImage->height ; pixel ++ ){
                 int pixelIndex =  outputImage->width * pixel + colum;
                 ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,
@@ -75,9 +87,9 @@ private:
         //    s2 = sin(attitude / 2)
         //    s3 = sin(bank / 2)
 
-        float heading = sensor->getAngleAlpha();
-        float attitude = sensor->getAngleBeta();
-        float bank = sensor->getAngleGamma();
+        float heading   = sensor->getValue01();
+        float attitude  = sensor->getValue02();
+        float bank      = sensor->getValue03();
         
         float c1 = cosf( heading / 2.0 );
         float c2 = cosf( attitude / 2.0 );
@@ -86,11 +98,11 @@ private:
         float s2 = sinf( attitude / 2.0 );
         float s3 = sinf( bank / 2.0);
         
-        angle01 = 2 * acosf( c1 * c2 * c3 - s1 * s2 * s3 );
-        angle02 = angle01 + PI;
+        angle = 2 * acosf( c1 * c2 * c3 - s1 * s2 * s3 );
+        cout << "Angle = " << angle << "\n";
+        if( angle >= 2 * PI )
+            angle = fmod ( angle , 2.0 * PI);
         
-        angle01 = fmod ( angle01 , 2.0 * PI );
-        angle02 = fmod ( angle02 , 2.0 * PI );
     }
 
     
