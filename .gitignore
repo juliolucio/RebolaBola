@@ -1,1 +1,5 @@
 *.app
+.DS_Store
+bin/data/settings.xml
+rebolaBola.xcodeproj/project.xcworkspace/xcuserdata/juliolucio.xcuserdatad/UserInterfaceState.xcuserstate
+src/.DS_Store

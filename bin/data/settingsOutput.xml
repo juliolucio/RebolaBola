@@ -1,8 +1,8 @@
 <group>
-	<Atenuated>1</Atenuated>
-	<Pixel_Atenuation>0.6</Pixel_Atenuation>
-	<Gamma_correction>0</Gamma_correction>
-	<Draw_Stripe_01>0</Draw_Stripe_01>
-	<Draw_Stripe_02>0</Draw_Stripe_02>
-<group/>
+    <Atenuated>0</Atenuated>
+    <Pixel_Atenuation>0.6</Pixel_Atenuation>
+    <Gamma_correction>0</Gamma_correction>
+    <Draw_Stripe_01>1</Draw_Stripe_01>
+    <Draw_Stripe_02>1</Draw_Stripe_02>
+    <group/>
 </group>

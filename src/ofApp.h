@@ -90,7 +90,8 @@ private:
     void setCaptureType( captuteTypes type  , string fileName );
 //    void setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal );
     void updateTests();
-    void updateGammaAndAtenuation();
+    void updateAtenuation();
+    void updateGamma();
     
     //drawing
     void drawOutput( int x , int y);

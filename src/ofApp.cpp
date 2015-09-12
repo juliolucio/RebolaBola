@@ -12,15 +12,15 @@ void ofApp::setup(){
     imageInput = new ofImage();
     pixelator = new ofxImagePixelator();
     imageOutput = pixelator->getOutputImage();
-
-    screenSelectionCapture.setup( isRetina, ofPoint( 300 , 200 ), ofPoint( 640 , 64 ) );
+    
+    screenSelectionCapture.setup( isRetina, ofPoint( 300 , 300 ), ofPoint( 200 , 200 ) );
     backgroudCapture.setup( isRetina );
     
     projectableImage = new ofxProjectableImage();
     projectableImage->setup();
     
     setInputModeImage();
-        
+    
     ofBackground( 0 );
     
     setupGuiInput();
@@ -31,7 +31,7 @@ void ofApp::setup(){
     threadSensorReciver->setup( "/dev/cu.usbmodem1451" , 115200 );
     threadSensorReciver->start();
     //assert( threadSensorReciver->isConectedToSensor() );
-
+    
     threadLedSender.setOutputImage( imageOutput );
     threadLedSender.setSensorThread( threadSensorReciver );
     threadLedSender.start();
@@ -40,7 +40,7 @@ void ofApp::setup(){
 void ofApp::update(){
     if( isDebuging )
         updateTests();
-
+    
     else{
         switch(captureType){
             case CAPTURE_UNSET:
@@ -66,11 +66,13 @@ void ofApp::update(){
         }
         pixelator->update();
         imageOutput = pixelator->getOutputImage();
+        updateGamma();
+        updateAtenuation();
     }
-    updateGammaAndAtenuation();
+    
     setDrawingStripe01();
     setDrawingStripe02();
- }
+}
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){
     captureType = type;
@@ -81,17 +83,17 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
             return;
         case CAPTURE_FROM_IMAGE_FILE:
             assert( imageInput->loadImage( fileName ));
-//            if( !imageInput->loadImage( fileName ) ){
-//                cout << "**error: flie " <<  fileName << "not found\n";
-//                break;
-//            }
+            //            if( !imageInput->loadImage( fileName ) ){
+            //                cout << "**error: flie " <<  fileName << "not found\n";
+            //                break;
+            //            }
             break;
             
         case CAPTURE_FROM_SCREEN:
             imageInput->allocate( screenSelectionCapture.getImage()->width , screenSelectionCapture.getImage()->height, OF_IMAGE_COLOR_ALPHA );
             //imageInput = screenSelectionCapture.getImage();
             break;
-
+            
         case CAPTURE_FROM_VIDEO_FILE:
             //assert( !video.loadMovie( fileName ) );
             if( !video.loadMovie( fileName ) ){
@@ -165,35 +167,61 @@ void ofApp::updateTests(){
     imageOutput->update();
 }
 //--------------------------------------------------------------
-void ofApp::updateGammaAndAtenuation(){
+void ofApp::updateAtenuation(){
+    if( !isAtenuated )
+        return;
     unsigned char* pixelsOutput = imageOutput->getPixels();
-    for( int y = 0 ; y <  imageOutput->height  ; y ++){
-        for( int x = 0 ; x < imageOutput->width  ; x ++){
-            ofColor testColor = imageOutput->getColor(x, y);
-            if( isAtenuated ){
-                testColor.r *= pixelAtenuation;
-                testColor.g *= pixelAtenuation;
-                testColor.b *= pixelAtenuation;
-            }
-            
-            if( isGammaCorrecting ){
-                testColor.r = gammaCorrection[testColor.r];
-                testColor.g = gammaCorrection[testColor.g];
-                testColor.b = gammaCorrection[testColor.b];
-            }
-            
-//            testColor.r = min( int(testColor.r) , 254 );
-//            testColor.g = min( int(testColor.g), 254 );
-//            testColor.b = min( int(testColor.b), 254 );
-//            
-//            testColor.r = max( int(testColor.r), 0 );
-//            testColor.g = max( int(testColor.g), 0 );
-//            testColor.b = max( int(testColor.b), 0 );
-            imageOutput->setColor( x , y , testColor );
-        }
-    }
-    imageOutput->setFromPixels( pixelsOutput, imageOutput->width, imageOutput->height, OF_IMAGE_COLOR );
+    for( int p = 0 ; p < imageOutput->width * imageOutput->height * 3 ; p ++ )
+        pixelsOutput[p] = float(pixelAtenuation) * float( pixelsOutput[p] );
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
     imageOutput->update();
+}
+//--------------------------------------------------------------
+void ofApp::updateGamma(){
+    if( !isGammaCorrecting )
+        return;
+    unsigned char* pixelsOutput = imageOutput->getPixels();
+    for( int p = 0 ; p < imageOutput->width * imageOutput->height * 3 ; p ++ )
+        pixelsOutput[ p ] = gammaCorrection[ pixelsOutput[ p ] ];
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
+    imageOutput->update();
+}
+//--------------------------------------------------------------
+void ofApp::draw(){
+    ofHideCursor();
+    ofSetColor(255);
+    ofClear(127);
+    if( captureType == CAPTURE_FROM_SCREEN )
+        backgroudCapture.draw();
+    
+    //if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
+    ofPoint drawPos = ofPoint( 550 , 20 );
+    drawInput( drawPos.x , drawPos.y );
+    drawOutput( drawPos.x , imageInput->height + drawPos.y * 2 );
+    
+    guiInput.draw();
+    guiDebug.draw();
+    guiOutput.draw();
+    
+    if( captureType ==  CAPTURE_FROM_SCREEN ){
+        screenSelectionCapture.draw();
+    }
+    threadLedSender.drawLastColumStripe01( ofGetWidth() - 80  , 0 , 4  );
+    threadLedSender.drawLastColumStripe02( ofGetWidth() - 40  , 0 , 4  );
+    threadLedSender.drawAngle( ofPoint( 300 , 20  ) , ofPoint( 100 , 100  ));
+    threadLedSender.drawOutput( 300 , 150  );
+    //}
+    
+    //drawing the mouse cursor
+    ofSetHexColor( 0xff2222 );
+    ofNoFill();
+    ofCircle( ofGetMouseX() , ofGetMouseY() , 4 );
+    ofFill();
+    
+    ofSetHexColor( 0x22ff22f );
+    ofCircle( ofGetMouseX() , ofGetMouseY() , 3 );
+    ofSetHexColor( 0x2222ff );
+    ofCircle( ofGetMouseX() , ofGetMouseY() , 2 );
 }
 //--------------------------------------------------------------
 void ofApp::drawOutput( int x , int y ){
@@ -240,40 +268,6 @@ void ofApp::drawInput( int x , int y  ){
     ofSetColor(255);
     ofNoFill();
     imageInput->draw( x , y , imageInput->width , imageInput->height );
-}
-//--------------------------------------------------------------
-void ofApp::draw(){
-    ofHideCursor();
-    ofSetColor(255);
-    ofClear(127);
-    if( captureType == CAPTURE_FROM_SCREEN )
-        backgroudCapture.draw();
-    
-    if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
-        ofPoint drawPos = ofPoint( 550 , 20 );
-        drawInput( drawPos.x , drawPos.y );
-        drawOutput( drawPos.x , imageInput->height + drawPos.y * 2 );
-
-        guiInput.draw();
-        guiDebug.draw();
-        guiOutput.draw();
-        
-        if( captureType ==  CAPTURE_FROM_SCREEN ){
-            screenSelectionCapture.draw();
-        }
-    }
-    drawLastColum( ofGetWidth() - 40  , 0 , 4 );
-    
-    //drawing the mouse cursor
-    ofSetHexColor( 0xff2222 );
-    ofNoFill();
-    ofCircle( ofGetMouseX() , ofGetMouseY() , 4 );
-    ofFill();
-    
-    ofSetHexColor( 0x22ff22f );
-    ofCircle( ofGetMouseX() , ofGetMouseY() , 3 );
-    ofSetHexColor( 0x2222ff );
-    ofCircle( ofGetMouseX() , ofGetMouseY() , 2 );
 }
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
