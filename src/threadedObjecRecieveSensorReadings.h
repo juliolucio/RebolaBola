@@ -23,16 +23,16 @@ private:
         while( !foundBegining ){
             recieved.clear();
             byteReaded = serialToArduino->readByte();
-            if( byteReaded == 'a'){
+            if( byteReaded == '<'){
                 foundBegining = true;
                 //cout << "begin : ";
                 while( !foundEnd ){
                     if( serialToArduino->available() ){
                         byteReaded = serialToArduino->readByte();
                         if( byteReaded ){
-                            if( byteReaded != 'b' && byteReaded != 'a' )
+                            if( byteReaded != '>' && byteReaded != '<' )
                                 recieved += byteReaded;
-                            else if( byteReaded == 'b' ){
+                            else if( byteReaded == '>' ){
                                 foundEnd = true;
                                 //cout << "  end\n";
                                 break;
@@ -47,12 +47,21 @@ private:
             std::istream_iterator<std::string> begin(ss);
             std::istream_iterator<std::string> end;
             std::vector<std::string> vstrings(begin, end);
-            if( vstrings.size() == 3 ){
-                value01 = 0.0174532925 * ofToDouble( vstrings[0] );
-                value02 = 0.0174532925 * ofToDouble( vstrings[1] );
-                value03 = 0.0174532925 * ofToDouble( vstrings[2] );
-             }
+            if( vstrings.size() == 1 )
+                value01 = ofToDouble( vstrings[0] );
         }
+//        
+//        if( foundBegining && foundEnd  ){
+//            std::stringstream ss(recieved);
+//            std::istream_iterator<std::string> begin(ss);
+//            std::istream_iterator<std::string> end;
+//            std::vector<std::string> vstrings(begin, end);
+//            if( vstrings.size() == 3 ){
+//                value01 = 0.0174532925 * ofToDouble( vstrings[0] );
+//                value02 = 0.0174532925 * ofToDouble( vstrings[1] );
+//                value03 = 0.0174532925 * ofToDouble( vstrings[2] );
+//            }
+//        }
     }
     
     
@@ -88,7 +97,7 @@ public:
             if(lock()){
                 if( serialToArduino->isInitialized() )
                 recieveMessages();
-                cout << "euler = ( " << value01 << " , " << value02 << " , " << value03 << " ) " << "\n";
+                //cout << "euler = ( " << value01 << " , " << value02 << " , " << value03 << " ) " << "\n";
                 
                 unlock();
             }
@@ -101,12 +110,12 @@ public:
         ofScopedLock lock(mutex);
         return value01;
     }
-    double getValue02(){
-        ofScopedLock lock(mutex);
-        return value02;
-    }
-    double getValue03(){
-        ofScopedLock lock(mutex);
-        return value03;
-    }
+//    double getValue02(){
+//        ofScopedLock lock(mutex);
+//        return value02;
+//    }
+//    double getValue03(){
+//        ofScopedLock lock(mutex);
+//        return value03;
+//    }
 };
