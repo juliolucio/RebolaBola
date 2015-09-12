@@ -153,6 +153,8 @@
 		8985C6DE1B92858100A8DD68 /* ofxNeoPixelLedSphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ofxNeoPixelLedSphere.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8985C6E11B928E2A00A8DD68 /* ofxNeoPixelLed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxNeoPixelLed.cpp; sourceTree = "<group>"; };
 		8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLed.h; sourceTree = "<group>"; };
+		89A9FF2A1BA3C47E00E72469 /* rebolaSensor */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensor; sourceTree = "<group>"; };
+		89A9FF2B1BA3C47E00E72469 /* rebolaSensorCalculates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensorCalculates; sourceTree = "<group>"; };
 		89D5ED701BA0A02E00883FDF /* colorGradienX.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienX.png; path = bin/data/colorGradienX.png; sourceTree = "<group>"; };
 		89D5ED711BA0A02E00883FDF /* colorGradienY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienY.png; path = bin/data/colorGradienY.png; sourceTree = "<group>"; };
 		89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxProjectableImage.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -426,6 +428,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				89A9FF2A1BA3C47E00E72469 /* rebolaSensor */,
+				89A9FF2B1BA3C47E00E72469 /* rebolaSensorCalculates */,
 				892B88051B97D2FC007A2E9E /* Simutation */,
 				8968EEAF1B0A9DFD00864060 /* gamma.h */,
 				8968EEB21B0A9DFD00864060 /* main.cpp */,
