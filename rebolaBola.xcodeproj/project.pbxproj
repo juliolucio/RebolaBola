@@ -155,6 +155,7 @@
 		8985C6E21B928E2A00A8DD68 /* ofxNeoPixelLed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxNeoPixelLed.h; sourceTree = "<group>"; };
 		89A9FF2A1BA3C47E00E72469 /* rebolaSensor */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensor; sourceTree = "<group>"; };
 		89A9FF2B1BA3C47E00E72469 /* rebolaSensorCalculates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rebolaSensorCalculates; sourceTree = "<group>"; };
+		89CCE7281BA565030058C6A3 /* openChildApp.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = openChildApp.sh; path = bin/data/openChildApp.sh; sourceTree = "<group>"; };
 		89D5ED701BA0A02E00883FDF /* colorGradienX.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienX.png; path = bin/data/colorGradienX.png; sourceTree = "<group>"; };
 		89D5ED711BA0A02E00883FDF /* colorGradienY.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colorGradienY.png; path = bin/data/colorGradienY.png; sourceTree = "<group>"; };
 		89D6C47E1B94C666002E77D8 /* ofxProjectableImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ofxProjectableImage.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -317,6 +318,7 @@
 		895067321B83F4F1000E0E1E /* data */ = {
 			isa = PBXGroup;
 			children = (
+				89CCE7281BA565030058C6A3 /* openChildApp.sh */,
 				89318E061B9D13B5002C9D88 /* colors.jpg */,
 				89318E071B9D13B5002C9D88 /* fcserver */,
 				89318E081B9D13B5002C9D88 /* image01.png */,

@@ -81,17 +81,21 @@ private:
     //panel output
     ofxToggle isAtenuated;
     ofxFloatSlider pixelAtenuation;
+    ofxFloatSlider updateDelay;
     ofxIntSlider columDrawingDelay;
     ofxToggle isGammaCorrecting;
     ofxToggle isUpdatingStripe01;
     ofxToggle isUpdatingStripe02;
     ofxPanel guiOutput;
     
+    
+    void openChildApp();
     void setCaptureType( captuteTypes type  , string fileName );
 //    void setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal );
     void updateTests();
     void updateAtenuation();
     void updateGamma();
+    void test();
     
     //drawing
     void drawOutput( int x , int y);
@@ -116,6 +120,7 @@ private:
     void setDrawingStripe01();
     void setDrawingStripe02();
 
+    void processDelayChange();
    
     
     

@@ -4,6 +4,8 @@ extern "C" {
 }
 //--------------------------------------------------------------
 void ofApp::setup(){
+    openChildApp();
+    
     ofSetVerticalSync(true);
     
     isRetina = true;
@@ -19,7 +21,7 @@ void ofApp::setup(){
     projectableImage = new ofxProjectableImage();
     projectableImage->setup();
     
-    setInputModeImage();
+    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienX.png" );
     
     ofBackground( 0 );
     
@@ -35,6 +37,7 @@ void ofApp::setup(){
     threadLedSender.setOutputImage( imageOutput );
     threadLedSender.setSensorThread( threadSensorReciver );
     threadLedSender.start();
+    
 }
 //--------------------------------------------------------------
 void ofApp::update(){
@@ -66,12 +69,14 @@ void ofApp::update(){
         }
         pixelator->update();
         imageOutput = pixelator->getOutputImage();
+        //test();
         updateGamma();
         updateAtenuation();
     }
-    
+    //threadLedSender.sendTestAngle();
     setDrawingStripe01();
     setDrawingStripe02();
+    threadLedSender.setDelay( updateDelay );
 }
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){
@@ -115,6 +120,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
     }
     pixelator->setImage( imageInput , numPixels );
     cout << " setting capture mode to  " <<  captureType << "\n";
+    
 }
 ////--------------------------------------------------------------
 //    void ofApp::setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal ){
@@ -177,6 +183,17 @@ void ofApp::updateAtenuation(){
     imageOutput->update();
 }
 //--------------------------------------------------------------
+void ofApp::test(){
+    unsigned char* pixelsOutput = imageOutput->getPixels();
+    for( int p = 0 ; p < imageOutput->width * imageOutput->height  ; p ++ ){
+        pixelsOutput[3*p] = 100;
+        pixelsOutput[3*p+1] = 0;
+        pixelsOutput[3*p+2] = 0;
+    }
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
+    imageOutput->update();
+}
+//--------------------------------------------------------------
 void ofApp::updateGamma(){
     if( !isGammaCorrecting )
         return;
@@ -209,7 +226,7 @@ void ofApp::draw(){
     threadLedSender.drawLastColumStripe01( ofGetWidth() - 80  , 0 , 4  );
     threadLedSender.drawLastColumStripe02( ofGetWidth() - 40  , 0 , 4  );
     threadLedSender.drawAngle( ofPoint( 300 , 20  ) , ofPoint( 100 , 100  ));
-    threadLedSender.drawOutput( 300 , 150  );
+    threadLedSender.drawOutput( 300 , 200  );
     //}
     
     //drawing the mouse cursor
@@ -317,6 +334,7 @@ void ofApp::mouseMoved(int x, int y ){
 void ofApp::mouseDragged(int x, int y, int button){
     lastTimerUserInteracted = ofGetElapsedTimeMillis();
     screenSelectionCapture.mouseDragged(x, y , button) ;
+    
 }
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
@@ -337,3 +355,26 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
 }
+void ofApp::openChildApp(){
+    string shPath;
+    shPath = ofToDataPath( "openChildApp.sh", true );
+    
+    char *shPathChar;
+    shPathChar = new char[ shPath.length() + 1 ];
+    
+    strcpy( shPathChar, shPath.c_str() );
+    int pid = fork();
+    
+    cout << "pid :: " << pid << endl;
+    switch ( pid ){
+        case -1 :
+            cout << "Uh-Oh! fork() failed.\n" << endl;
+            break;
+        case  0 :
+            execl( shPathChar, shPathChar, NULL );
+            break;
+        default :
+            break;
+    }
+}
+

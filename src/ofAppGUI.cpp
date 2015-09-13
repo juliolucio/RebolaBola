@@ -31,32 +31,33 @@ void ofApp::setupGuiOutput(){
     guiOutput.add( isAtenuated.setup("Atenuated" , false ) );
     guiOutput.add( pixelAtenuation.setup("Pixel Atenuation", .6 , 0 , 1 ) );
     guiOutput.add( isGammaCorrecting.setup("Gamma correction" , false ) );
-    
+    guiOutput.add( updateDelay.setup("Value", 0 , -7 , 0 ) );
     guiOutput.add( isUpdatingStripe01.setup("Draw Stripe 01" , false ) );
     guiOutput.add( isUpdatingStripe02.setup("Draw Stripe 02" , false ) );
     guiOutput.loadFromFile("settingsOutput.xml");
+    //updateDelay.addListener( this , &ofApp::processDelayChange );
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeImage(){
-    setCaptureType( CAPTURE_FROM_IMAGE_FILE , "colorGradienX.png" );
-//  ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a image ");
-//    if (openFileResult.bSuccess){
-//        ofLogVerbose("User selected a file");
-//        processOpenFileImage( openFileResult );
-//    }
-//    else
-//        ofLogVerbose("User hit cancel");
+    //setCaptureType( CAPTURE_FROM_IMAGE_FILE , "diagonal.png" );
+  ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a image ");
+    if (openFileResult.bSuccess){
+        ofLogVerbose("User selected a file");
+        processOpenFileImage( openFileResult );
+    }
+    else
+        ofLogVerbose("User hit cancel");
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeVideo(){
-   setCaptureType( CAPTURE_FROM_VIDEO_FILE , "vj.mp4" );
-//    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a video file");
-//    if (openFileResult.bSuccess){
-//        ofLogVerbose("User selected a file");
-//        processOpenFileVideo( openFileResult );
-//    }
-//    else
-//        ofLogVerbose("User hit cancel");
+   //setCaptureType( CAPTURE_FROM_VIDEO_FILE , "vj.mp4" );
+    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a video file");
+    if (openFileResult.bSuccess){
+        ofLogVerbose("User selected a file");
+        processOpenFileVideo( openFileResult );
+    }
+    else
+        ofLogVerbose("User hit cancel");
 }
 //--------------------------------------------------------------
 void ofApp::setInputModeCamera(){
@@ -74,9 +75,7 @@ void ofApp::processOpenFileImage(ofFileDialogResult openFileResult){
     if (file.exists()){
         ofLogVerbose("The file exists - now checking the type via file extension");
         string fileExtension = ofToUpper(file.getExtension());
-        if (fileExtension == "JPG" || fileExtension == "PNG" || fileExtension == "jpeg" || fileExtension == "tga") {
-            setCaptureType( CAPTURE_FROM_IMAGE_FILE , openFileResult.getPath() );
-        }
+        setCaptureType( CAPTURE_FROM_IMAGE_FILE , openFileResult.getPath() );
     }
 }
 //--------------------------------------------------------------
@@ -87,9 +86,7 @@ void ofApp::processOpenFileVideo(ofFileDialogResult openFileResult){
     if (file.exists()){
         ofLogVerbose("The file exists - now checking the type via file extension");
         string fileExtension = ofToUpper(file.getExtension());
-        if (fileExtension == "mpeg" || fileExtension == "mov" || fileExtension == "avi" ) {
-            setCaptureType( CAPTURE_FROM_VIDEO_FILE , openFileResult.getPath() );
-        }
+        setCaptureType( CAPTURE_FROM_VIDEO_FILE , openFileResult.getPath() );
     }
 }
 //--------------------------------------------------------------
@@ -99,6 +96,9 @@ void ofApp::setDrawingStripe01(){
 //--------------------------------------------------------------
 void ofApp::setDrawingStripe02( ){
     threadLedSender.setDrawingStripe02( isUpdatingStripe02 );
-    
 }
-
+//--------------------------------------------------------------
+void ofApp::processDelayChange(){
+    threadLedSender.setDelay( updateDelay );
+   
+}

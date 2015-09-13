@@ -16,17 +16,22 @@ private:
     double angle01;
     double angle02;
     
+    unsigned long long time;
+    
     int colum01;
     int colum02;
     
     vector<ofColor> colorsStrip01;
     vector<ofColor> colorsStrip02;
     
+    unsigned long long lastUpdateTime;
+    
 protected:
     ofImage* outputImage;
     ThreadedObjecRecieveSensorReadings* sensor;
     bool isSendingStripe01;
     bool isSendingStripe02;
+    float phaseShift;
     
 public:
     ThreadedObjecSendOutputToLedImage(){
@@ -50,16 +55,15 @@ public:
         while( isThreadRunning() ){
             if(lock()){
                 pixelsOutput = outputImage->getPixels();
-                
                 updateColumnIndex();
-                
                 //cout << "Angle = " << angle << "\n";
                 //sendTestAngle();
-                
                 if( isSendingStripe01 )
                     sendStripeForAngleTo01();
                 if( isSendingStripe02 )
                     sendStripeForAngleTo02();
+                lastUpdateTime = ofGetElapsedTimeMicros();
+                
                 unlock();
             }
             else
@@ -79,6 +83,11 @@ public:
         else{
             cout << "setOutputImage()" << "Unable to lock mutex." << "\n";
         }
+    }
+    //--------------------------------------------------------------
+    void setDelay( float value ){
+        ofScopedLock lock(mutex);
+        phaseShift = value;
     }
     //--------------------------------------------------------------
     void setSensorThread( ThreadedObjecRecieveSensorReadings*  theSensor ){
@@ -129,6 +138,8 @@ public:
         angleStr += ofToString( angle01 , 4 );
         angleStr += "\na2 = ";
         angleStr += ofToString( angle02 , 4 );
+        angleStr += "\nt = ";
+        angleStr += ofToString( time  );
         ofDrawBitmapString(angleStr, position.x + 5 , position.y + size.y + 12 );
     }
     //--------------------------------------------------------------
@@ -195,42 +206,49 @@ public:
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    
-private:
     void sendTestAngle(){
         if( !opcClient.isConnected() )
             return;
         colorsStrip01.clear();
-        
-        float c1 = ofMap( angle01 , 0 , 2.0 * PI , 0 , 255 );
-        
-        for( int p = 0 ; p < outputImage->height ; p ++ ){
-            ofColor pixelColor = ofColor( c1 , 255 , 255 - c1 );
-            colorsStrip01.push_back( pixelColor );
-        }
-        
+        ofColor theColor;
+        angle01 = sensor->getValue01();
+        if( angle01 < PI )
+            theColor = ofColor( 125 , 0 , 0 );
+        else
+            theColor = ofColor( 0 , 0 , 125 );
+        for( int p = 0 ; p < outputImage->height ; p ++ )
+            colorsStrip01.push_back( theColor );
         opcClient.writeChannel( indexStripe01 , colorsStrip01 );
     }
+    
+private:
     //--------------------------------------------------------------
     void updateColumnIndex(){
         angle01 = sensor->getValue01();
+        time = ofGetElapsedTimeMillis();
+        angle01 = angle01 - float(phaseShift) * float(time)/10000.0;
+        
         angle02 = angle01 + PI;
+        
+        if( angle01 >= 2 * PI )
+            angle01 = fmod( angle01 , 2.0 * PI );
         if( angle02 >= 2 * PI )
             angle02 = fmod( angle02 , 2.0 * PI );
         
-        colum01 = ofMap( angle01 , 0 , 2 * PI , 0 , outputImage->width-1  );
-        colum02 = ofMap( angle02 , 0 , 2 * PI , 0 , outputImage->width-1  );
         
-        //            if( angle <= PI )
-        //                colum = ofMap( angle , 0 , PI , 0 , outputImage->width-1  );
-        //            else
-        //                colum = ofMap( angle , PI , 2.0 * PI ,  outputImage->width-1 , 0 );
-        //            if( angle2 <= PI )
-        //                colum = ofMap( angle2 , 0 , PI , 0 , outputImage->width-1  );
-        //            else
-        //                colum = ofMap( angle2 , PI , 2.0 * PI ,  outputImage->width-1 , 0 );
+        colum01 = ofMap( angle01 , 0 , 2*PI , 0 , outputImage->width-1  );
+        colum02 = ofMap( angle02 , 0 , 2*PI , 0 , outputImage->width-1  );
+        
+        
+        //        if( angle01 < PI )
+        //            colum01 = ofMap( angle01 , 0 , PI , 0 , outputImage->width-1  );
+        //        else
+        //            colum01 = ofMap( angle01 ,  PI , 2 * PI ,outputImage->width-1 , 0 );
         //
-
+        //        if( angle02 < PI )
+        //            colum02 = ofMap( angle02 , 0 , PI , 0 , outputImage->width-1  );
+        //        else
+        //            colum02 = ofMap( angle02 ,  PI , 2 * PI ,outputImage->width-1 , 0 );
     }
     //--------------------------------------------------------------
     void sendStripeForAngleTo01(){
