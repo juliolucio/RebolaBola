@@ -55,18 +55,26 @@ void loop(void) {
   if ( event.orientation.y == -12.2500 || event.orientation.z == -0.0625 )
     return;
 
-  heading   = 0.0174532925 * event.orientation.z;
+  heading   = 0.0174532925 * event.orientation.x;
   attitude  = 0.0174532925 * event.orientation.y;
-  bank      = 0.0174532925 * event.orientation.x;
+  bank      = 0.0174532925 * event.orientation.z;
+  //  Serial.print( "< " );
+  //  Serial.print( event.orientation.x );
+  //  Serial.print( " . " );
+  //  Serial.print( event.orientation.y  );
+  //  Serial.print( " . " );
+  //  Serial.print( event.orientation.z  );
+  //  Serial.println( " >" );
 
-  c1 = cosf( heading / 2.0 );
-  c2 = cosf( attitude / 2.0 );
-  c3 = cosf( bank / 2.0 );
-  s1 = sinf( heading / 2.0 );
-  s2 = sinf( attitude / 2.0 );
-  s3 = sinf( bank / 2.0);
+  //  c1 = cosf( heading / 2.0 );
+  //  c2 = cosf( attitude / 2.0 );
+  //  c3 = cosf( bank / 2.0 );
+  //  s1 = sinf( heading / 2.0 );
+  //  s2 = sinf( attitude / 2.0 );
+  //  s3 = sinf( bank / 2.0);
 
-  angle = 2 * acosf( c1 * c2 * c3 - s1 * s2 * s3 );
+  //  angle = 2 * acosf( c1 * c2 * c3 - s1 * s2 * s3 );
+  angle = 0.0174532925 * event.orientation.z + PI;
   Serial.print( "<" );
   Serial.print(angle, 4);
   Serial.print( ">" );
