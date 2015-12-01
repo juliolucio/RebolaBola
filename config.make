@@ -106,7 +106,6 @@
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
 # PROJECT_CFLAGS = 
-# PROJECT_CFLAGS = -framework AVFoundation -framework CoreMedia -framework QuartzCore
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
