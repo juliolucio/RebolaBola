@@ -153,8 +153,6 @@
 		896298221C0E632500ED9279 /* ofxScreenSelectorMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxScreenSelectorMarker.h; sourceTree = "<group>"; };
 		896298231C0E632500ED9279 /* threadedObjecRecieveSensorReadings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadedObjecRecieveSensorReadings.h; sourceTree = "<group>"; };
 		896298241C0E632500ED9279 /* threadedObjecSendOutputToLedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedImage.h; sourceTree = "<group>"; };
-		896298251C0E632500ED9279 /* threadedObjecSendOutputToLedStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripe.h; sourceTree = "<group>"; };
-		896298261C0E632500ED9279 /* threadedObjecSendOutputToLedStripest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadedObjecSendOutputToLedStripest.h; sourceTree = "<group>"; };
 		8DBD959DDDD76B62CED10849 /* NeoPixelRing60px.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = NeoPixelRing60px.h; path = ../../../addons/ofxOPC/src/NeoPixelRing60px.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
@@ -425,8 +423,6 @@
 				896298221C0E632500ED9279 /* ofxScreenSelectorMarker.h */,
 				896298231C0E632500ED9279 /* threadedObjecRecieveSensorReadings.h */,
 				896298241C0E632500ED9279 /* threadedObjecSendOutputToLedImage.h */,
-				896298251C0E632500ED9279 /* threadedObjecSendOutputToLedStripe.h */,
-				896298261C0E632500ED9279 /* threadedObjecSendOutputToLedStripest.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
