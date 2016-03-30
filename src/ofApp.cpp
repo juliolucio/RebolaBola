@@ -4,7 +4,7 @@ extern "C" {
 }
 //--------------------------------------------------------------
 void ofApp::setup(){
-    openChildApp();
+    //openChildApp();
     
     ofSetVerticalSync(true);
     
@@ -30,9 +30,9 @@ void ofApp::setup(){
     setupGuiOutput();
     
     threadSensorReciver = new ThreadedObjecRecieveSensorReadings();
-    threadSensorReciver->setup( "/dev/cu.usbmodem1451" , 115200 );
+    threadSensorReciver->setup( "/dev/cu.usbmodem1421" , 250000 );
     threadSensorReciver->start();
-    //assert( threadSensorReciver->isConectedToSensor() );
+    assert( threadSensorReciver->isConectedToSensor() );
     
     threadLedSender.setOutputImage( imageOutput );
     threadLedSender.setSensorThread( threadSensorReciver );
@@ -76,7 +76,7 @@ void ofApp::update(){
     //threadLedSender.sendTestAngle();
     setDrawingStripe01();
     setDrawingStripe02();
-    threadLedSender.setDelay( updateDelay );
+    //threadLedSender.setDelay( updateDelay );
 }
 //--------------------------------------------------------------
 void ofApp::setCaptureType( captuteTypes type , string fileName ){

@@ -37,10 +37,11 @@ public:
     ThreadedObjecSendOutputToLedImage(){
         opcClient.setup("127.0.0.1", 7890);
         if( !opcClient.isConnected() )
-            cout << " not conected to FadeCandy\n";
+            cout << " not connected to FadeCandy\n";
         
         indexStripe01 = 1;
         indexStripe02 = 8;
+        cout << "Connected to FadeCandy\n";
     }
     //--------------------------------------------------------------
     void start(){
