@@ -30,7 +30,7 @@ void ofApp::setup(){
     setupGuiOutput();
     
     threadSensorReciver = new ThreadedObjecRecieveSensorReadings();
-    threadSensorReciver->setup( "/dev/cu.usbmodem1421" , 250000 );
+    threadSensorReciver->setup( "/dev/cu.usbmodem1421" , 115200 );
     threadSensorReciver->start();
     assert( threadSensorReciver->isConectedToSensor() );
     
@@ -54,17 +54,17 @@ void ofApp::update(){
             case CAPTURE_FROM_SCREEN:
                 backgroudCapture.update();
                 screenSelectionCapture.update();
-                imageInput->setFromPixels( screenSelectionCapture.getImage()->getPixels() , screenSelectionCapture.getImage()->width, screenSelectionCapture.getImage()->height, OF_IMAGE_COLOR_ALPHA );
+                imageInput->setFromPixels( screenSelectionCapture.getImage()->getPixels() , screenSelectionCapture.getImage()->getWidth(), screenSelectionCapture.getImage()->getHeight(), OF_IMAGE_COLOR_ALPHA );
                 break;
                 
             case CAPTURE_FROM_VIDEO_FILE:
                 video.update();
-                imageInput->setFromPixels( video.getPixels() , video.width, video.height, OF_IMAGE_COLOR );
+                imageInput->setFromPixels( video.getPixels() , video.getWidth(), video.getHeight(), OF_IMAGE_COLOR );
                 break;
                 
             case CAPTURE_FROM_CAMERA:
                 camera.update();
-                imageInput->setFromPixels( camera.getPixels() , camera.width , camera.height, OF_IMAGE_COLOR );
+                imageInput->setFromPixels( camera.getPixels() , camera.getWidth() , camera.getHeight(), OF_IMAGE_COLOR );
                 break;
         }
         pixelator->update();
@@ -95,7 +95,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
             break;
             
         case CAPTURE_FROM_SCREEN:
-            imageInput->allocate( screenSelectionCapture.getImage()->width , screenSelectionCapture.getImage()->height, OF_IMAGE_COLOR_ALPHA );
+            imageInput->allocate( screenSelectionCapture.getImage()->getWidth() , screenSelectionCapture.getImage()->getHeight(), OF_IMAGE_COLOR_ALPHA );
             //imageInput = screenSelectionCapture.getImage();
             break;
             
@@ -105,7 +105,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
                 cout << "**error: flie " <<  fileName << "not found\n";
                 break;
             }
-            imageInput->allocate( video.width , video.height, OF_IMAGE_COLOR );
+            imageInput->allocate( video.getWidth() , video.getHeight(), OF_IMAGE_COLOR );
             video.play();
             break;
             
@@ -115,7 +115,7 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
                 cout << "**error: camera not found\n";
                 break;
             }
-            imageInput->allocate( camera.width , camera.height, OF_IMAGE_COLOR );
+            imageInput->allocate( camera.getWidth() , camera.getHeight(), OF_IMAGE_COLOR );
             break;
     }
     pixelator->setImage( imageInput , numPixels );
@@ -126,18 +126,18 @@ void ofApp::setCaptureType( captuteTypes type , string fileName ){
 //    void ofApp::setProjection( ofVec3f theImagePosition , ofVec3f theImageNormal ){
 //    projectableImage->setup();
 //    cout    << "Reseting sizes capture mode to  " <<  captureType << "\n"
-//    << "\tcapture width = " <<  imageOutput->width << "," << "\n"
-//    << "\tcapture height = " <<  imageOutput->height << "\n" << "\n";
+//    << "\tcapture width = " <<  imageOutput->getWidth() << "," << "\n"
+//    << "\tcapture height = " <<  imageOutput->getHeight() << "\n" << "\n";
 //}
 //--------------------------------------------------------------
 void ofApp::updateTests(){
     unsigned char* pixelsOutput = imageOutput->getPixels();
-    for( int y = 0 ; y <  imageOutput->height  ; y ++){
-        for( int x = 0 ; x < imageOutput->width  ; x ++){
+    for( int y = 0 ; y <  imageOutput->getHeight()  ; y ++){
+        for( int x = 0 ; x < imageOutput->getWidth()  ; x ++){
             ofColor testColor;
             
             if( isDebugTestX ){
-                if( x < imageOutput->width / 2 ){
+                if( x < imageOutput->getWidth() / 2 ){
                     testColor.r = 255;
                     testColor.g = 0;
                     testColor.b = 0;
@@ -150,7 +150,7 @@ void ofApp::updateTests(){
             }
             
             else if( isDebugTestY ){
-                if( y < imageOutput->height / 2 ){
+                if( y < imageOutput->getHeight() / 2 ){
                     testColor.r = 255;
                     testColor.g = 0;
                     testColor.b = 0;
@@ -163,9 +163,9 @@ void ofApp::updateTests(){
             }
             
             else if( isDebugisDebugTestXY ){
-                testColor.r  = ofMap( y , 0 , imageOutput->height   , 0 , 255 );
-                testColor.b  = ofMap( y , 0 , imageOutput->height    , 255 , 0 );
-                testColor.g  = ofMap( x , 0 , imageOutput->width    , 0 , 255 );
+                testColor.r  = ofMap( y , 0 , imageOutput->getHeight()   , 0 , 255 );
+                testColor.b  = ofMap( y , 0 , imageOutput->getHeight()    , 255 , 0 );
+                testColor.g  = ofMap( x , 0 , imageOutput->getWidth()    , 0 , 255 );
             }
             imageOutput->setColor( x , y , testColor );
         }
@@ -177,20 +177,20 @@ void ofApp::updateAtenuation(){
     if( !isAtenuated )
         return;
     unsigned char* pixelsOutput = imageOutput->getPixels();
-    for( int p = 0 ; p < imageOutput->width * imageOutput->height * 3 ; p ++ )
+    for( int p = 0 ; p < imageOutput->getWidth() * imageOutput->getHeight() * 3 ; p ++ )
         pixelsOutput[p] = float(pixelAtenuation) * float( pixelsOutput[p] );
-    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->getWidth() , imageOutput->getHeight(), OF_IMAGE_COLOR );
     imageOutput->update();
 }
 //--------------------------------------------------------------
 void ofApp::test(){
     unsigned char* pixelsOutput = imageOutput->getPixels();
-    for( int p = 0 ; p < imageOutput->width * imageOutput->height  ; p ++ ){
+    for( int p = 0 ; p < imageOutput->getWidth() * imageOutput->getHeight()  ; p ++ ){
         pixelsOutput[3*p] = 100;
         pixelsOutput[3*p+1] = 0;
         pixelsOutput[3*p+2] = 0;
     }
-    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->getWidth() , imageOutput->getHeight(), OF_IMAGE_COLOR );
     imageOutput->update();
 }
 //--------------------------------------------------------------
@@ -198,9 +198,9 @@ void ofApp::updateGamma(){
     if( !isGammaCorrecting )
         return;
     unsigned char* pixelsOutput = imageOutput->getPixels();
-    for( int p = 0 ; p < imageOutput->width * imageOutput->height * 3 ; p ++ )
+    for( int p = 0 ; p < imageOutput->getWidth() * imageOutput->getHeight() * 3 ; p ++ )
         pixelsOutput[ p ] = gammaCorrection[ pixelsOutput[ p ] ];
-    imageOutput->setFromPixels( pixelsOutput , imageOutput->width , imageOutput->height, OF_IMAGE_COLOR );
+    imageOutput->setFromPixels( pixelsOutput , imageOutput->getWidth() , imageOutput->getHeight(), OF_IMAGE_COLOR );
     imageOutput->update();
 }
 //--------------------------------------------------------------
@@ -214,7 +214,7 @@ void ofApp::draw(){
     //if( ofGetElapsedTimeMillis() - lastTimerUserInteracted < 7000 ){
     ofPoint drawPos = ofPoint( 550 , 20 );
     drawInput( drawPos.x , drawPos.y );
-    drawOutput( drawPos.x , imageInput->height + drawPos.y * 2 );
+    drawOutput( drawPos.x , imageInput->getHeight() + drawPos.y * 2 );
     
     guiInput.draw();
     guiDebug.draw();
@@ -245,20 +245,20 @@ void ofApp::drawOutput( int x , int y ){
     int borderSize = 8;
     ofSetColor( 120 , 120 , 180 );
     ofFill();
-    ofRect( x - borderSize , y - borderSize , imageOutput->width + 2 * borderSize , imageOutput->height + 2 * borderSize );
+    ofRect( x - borderSize , y - borderSize , imageOutput->getWidth() + 2 * borderSize , imageOutput->getHeight() + 2 * borderSize );
     
     ofSetColor( 50 , 50, 90 );
-    ofRect( x - borderSize / 2 , y - borderSize / 2 , imageOutput->width + 2 * borderSize / 2 , imageOutput->height + 2 * borderSize / 2 );
+    ofRect( x - borderSize / 2 , y - borderSize / 2 , imageOutput->getWidth() + 2 * borderSize / 2 , imageOutput->getHeight() + 2 * borderSize / 2 );
     ofSetColor(255);
     ofNoFill();
-    imageOutput->draw( x , y , imageOutput->width , imageOutput->height );
+    imageOutput->draw( x , y , imageOutput->getWidth() , imageOutput->getHeight() );
     ofDrawBitmapString( "Output", ofPoint( x + 5 , y + 2 ) );
 }
 //--------------------------------------------------------------
 void ofApp::drawLastColum( int x , int y ,  int widthFactor ){
-    int width = ofGetHeight() / imageOutput->height;
+    int width = ofGetHeight() / imageOutput->getHeight();
     unsigned char *pixelsOutput = imageOutput->getPixels();
-    for( int i = 0 ; i < imageOutput->height ; i ++ ){
+    for( int i = 0 ; i < imageOutput->getHeight() ; i ++ ){
         ofFill();
         ofSetHexColor( 0x229922 );
         ofRect( x , y + width * i , widthFactor * width , width  );
@@ -267,7 +267,7 @@ void ofApp::drawLastColum( int x , int y ,  int widthFactor ){
             ofDrawBitmapString(ofToString(i), ofPoint( x + width ,y + width * i) );
         
         //int pixelIndex =  0 + outputWidth * i;
-        int pixelIndex =  imageOutput->width * i;
+        int pixelIndex =  imageOutput->getWidth() * i;
         ofSetColor( ofColor( pixelsOutput[ 3 * pixelIndex ] ,  pixelsOutput[ 3 * pixelIndex + 1 ] , pixelsOutput[ 3 * pixelIndex  + 2 ] ) );
         ofRect( x+2 , y + width * i + 2 , widthFactor * width - 2 , width - 2  );
         ofSetColor(255);
@@ -278,13 +278,13 @@ void ofApp::drawInput( int x , int y  ){
     int borderSize = 8;
     ofSetColor( 180 , 200 , 10 );
     ofFill();
-    ofRect( x - borderSize , y - borderSize , imageInput->width + 2 * borderSize , imageInput->height + 2 * borderSize );
+    ofRect( x - borderSize , y - borderSize , imageInput->getWidth() + 2 * borderSize , imageInput->getHeight() + 2 * borderSize );
     
     ofSetColor( 50 , 50, 90 );
-    ofRect( x - borderSize / 2 , y - borderSize / 2 , imageInput->width + 2 * borderSize / 2 , imageInput->height + 2 * borderSize / 2 );
+    ofRect( x - borderSize / 2 , y - borderSize / 2 , imageInput->getWidth() + 2 * borderSize / 2 , imageInput->getHeight() + 2 * borderSize / 2 );
     ofSetColor(255);
     ofNoFill();
-    imageInput->draw( x , y , imageInput->width , imageInput->height );
+    imageInput->draw( x , y , imageInput->getWidth() , imageInput->getHeight() );
 }
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){

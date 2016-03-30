@@ -163,8 +163,8 @@ public:
         outputImage->draw(x,y);
         ofSetColor(125,125,125);
         ofNoFill();
-        ofRect(  x + colum01 - 1 , y - 1 , 3 , outputImage->height + 2);
-        ofRect(  x + colum02 - 1 , y - 1 , 3 , outputImage->height + 2);
+        ofRect(  x + colum01 - 1 , y - 1 , 3 , outputImage->getHeight() + 2);
+        ofRect(  x + colum02 - 1 , y - 1 , 3 , outputImage->getHeight() + 2);
     }
     //--------------------------------------------------------------
     void drawLastColumStripe01( int x , int y , int widthFactor ){
@@ -217,7 +217,7 @@ public:
             theColor = ofColor( 125 , 0 , 0 );
         else
             theColor = ofColor( 0 , 0 , 125 );
-        for( int p = 0 ; p < outputImage->height ; p ++ )
+        for( int p = 0 ; p < outputImage->getHeight() ; p ++ )
             colorsStrip01.push_back( theColor );
         opcClient.writeChannel( indexStripe01 , colorsStrip01 );
     }
@@ -237,19 +237,19 @@ private:
             angle02 = fmod( angle02 , 2.0 * PI );
         
         
-        colum01 = ofMap( angle01 , 0 , 2*PI , 0 , outputImage->width-1  );
-        colum02 = ofMap( angle02 , 0 , 2*PI , 0 , outputImage->width-1  );
+        colum01 = ofMap( angle01 , 0 , 2*PI , 0 , outputImage->getWidth()-1  );
+        colum02 = ofMap( angle02 , 0 , 2*PI , 0 , outputImage->getWidth()-1  );
         
         
         //        if( angle01 < PI )
-        //            colum01 = ofMap( angle01 , 0 , PI , 0 , outputImage->width-1  );
+        //            colum01 = ofMap( angle01 , 0 , PI , 0 , outputImage->getWidth()-1  );
         //        else
-        //            colum01 = ofMap( angle01 ,  PI , 2 * PI ,outputImage->width-1 , 0 );
+        //            colum01 = ofMap( angle01 ,  PI , 2 * PI ,outputImage->getWidth()-1 , 0 );
         //
         //        if( angle02 < PI )
-        //            colum02 = ofMap( angle02 , 0 , PI , 0 , outputImage->width-1  );
+        //            colum02 = ofMap( angle02 , 0 , PI , 0 , outputImage->getWidth()-1  );
         //        else
-        //            colum02 = ofMap( angle02 ,  PI , 2 * PI ,outputImage->width-1 , 0 );
+        //            colum02 = ofMap( angle02 ,  PI , 2 * PI ,outputImage->getWidth()-1 , 0 );
     }
     //--------------------------------------------------------------
     void sendStripeForAngleTo01(){
@@ -257,8 +257,8 @@ private:
             return;
         if( pixelsOutput ){
             colorsStrip01.clear();
-            for( int pixel = 0 ; pixel < outputImage->height ; pixel ++ ){
-                int pixelIndex =  outputImage->width * pixel + colum01;
+            for( int pixel = 0 ; pixel < outputImage->getHeight() ; pixel ++ ){
+                int pixelIndex =  outputImage->getWidth() * pixel + colum01;
                 ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,
                                              pixelsOutput[ 3 * pixelIndex + 1 ] ,
                                              pixelsOutput[ 3 * pixelIndex  + 2 ] );
@@ -273,8 +273,8 @@ private:
             return;
         if( pixelsOutput ){
             colorsStrip02.clear();
-            for( int pixel = 0 ; pixel < outputImage->height ; pixel ++ ){
-                int pixelIndex =  outputImage->width * pixel + colum02;
+            for( int pixel = 0 ; pixel < outputImage->getHeight() ; pixel ++ ){
+                int pixelIndex =  outputImage->getWidth() * pixel + colum02;
                 ofColor pixelColor = ofColor( pixelsOutput[ 3 * pixelIndex ] ,
                                              pixelsOutput[ 3 * pixelIndex + 1 ] ,
                                              pixelsOutput[ 3 * pixelIndex  + 2 ] );

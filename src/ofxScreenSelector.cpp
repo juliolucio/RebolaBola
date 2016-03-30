@@ -79,7 +79,7 @@ unsigned char* ofxScreenSelector::getPixels(){
 }
 //--------------------------------------------------------------
 ofPoint ofxScreenSelector::getSize(){
-    return ofPoint( selectionFormBackgoundImage->width , selectionFormBackgoundImage->height );
+    return ofPoint( selectionFormBackgoundImage->getWidth() , selectionFormBackgoundImage->getHeight() );
 }
 //--------------------------------------------------------------
 ofImage* ofxScreenSelector::getImage(){

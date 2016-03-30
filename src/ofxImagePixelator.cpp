@@ -15,11 +15,11 @@ void ofxImagePixelator::setImage( ofImage* theInputImage , int theOutputHeight )
 }
 //--------------------------------------------------------------
 void ofxImagePixelator::update(){
-    if( imageInputSizePrevious.x  != inputImage->width ||  imageInputSizePrevious.y != inputImage->height )
-        recalculateOutpuSize( outputImage->height );
+    if( imageInputSizePrevious.x  != inputImage->getWidth() ||  imageInputSizePrevious.y != inputImage->getHeight() )
+        recalculateOutpuSize( outputImage->getHeight() );
     updateOutputImage();
     
-    imageInputSizePrevious = ofPoint( inputImage->width , inputImage->height );
+    imageInputSizePrevious = ofPoint( inputImage->getWidth() , inputImage->getHeight() );
     
 }
 //--------------------------------------------------------------
@@ -54,24 +54,24 @@ ofImage* ofxImagePixelator::getOutputImage(){
 //private
 //--------------------------------------------------------------
 void ofxImagePixelator::recalculateOutpuSize( int theOutputHeight ){
-    proportions = float(inputImage->width) / float(inputImage->height);
+    proportions = float(inputImage->getWidth()) / float(inputImage->getHeight());
     
     outputImage->clear();
     outputImage->allocate( theOutputHeight * proportions , theOutputHeight ,  OF_IMAGE_COLOR );
     
-    ofPoint numPixelsInputPerPixelsOutputRest = ofPoint( inputImage->width % outputImage->width, inputImage->height % outputImage->height);
+    ofPoint numPixelsInputPerPixelsOutputRest = ofPoint( int(inputImage->getWidth()) % int(outputImage->getWidth()), int(inputImage->getHeight()) % int(outputImage->getHeight()));
     
-    pixelDensity.x = inputImage->width - numPixelsInputPerPixelsOutputRest.x;
-    pixelDensity.y = inputImage->height - numPixelsInputPerPixelsOutputRest.y;
+    pixelDensity.x = inputImage->getWidth() - numPixelsInputPerPixelsOutputRest.x;
+    pixelDensity.y = inputImage->getHeight() - numPixelsInputPerPixelsOutputRest.y;
     
-    pixelDensity.x = ( pixelDensity.x ) / outputImage->width ;
-    pixelDensity.y = ( pixelDensity.y ) / outputImage->height;
+    pixelDensity.x = ( pixelDensity.x ) / outputImage->getWidth() ;
+    pixelDensity.y = ( pixelDensity.y ) / outputImage->getHeight();
     
 }
 //--------------------------------------------------------------
 void ofxImagePixelator::updateOutputImage(){
-    for( int y = 0 ; y <  outputImage->height  ; y ++){
-        for( int x = 0 ; x < outputImage->width  ; x ++){
+    for( int y = 0 ; y <  outputImage->getHeight()  ; y ++){
+        for( int x = 0 ; x < outputImage->getWidth()  ; x ++){
             ofPoint positioFirstPixel;
             positioFirstPixel.x = x * pixelDensity.x;
             positioFirstPixel.y = y * pixelDensity.y;

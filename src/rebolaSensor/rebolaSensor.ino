@@ -6,7 +6,7 @@
 Adafruit_BNO055 bno = Adafruit_BNO055();
 
 void setup(void){
-  Serial.begin(115200);
+  Serial.begin(250000);
   delay( 2000 );
   Serial.println("Setting up sensor:");
   if(!bno.begin() ){

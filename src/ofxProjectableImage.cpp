@@ -58,12 +58,12 @@ void ofxProjectableImage::updateSphereColor(){
             float xp = tanf( angleFi ) * imageDistance / cosf( angleTeta );
             float yp = tanf( angleTeta ) * imageDistance;
             
-            float deltaX = spatialWidth / imageInput->width;
-            float deltaY =  spatialHeight / imageInput->height;
-            int i = xp / deltaX + imageInput->width / 2;
-            int j = yp / deltaY + imageInput->height / 2;
-            if( i >= 0 && i < imageInput->width ){
-                if( j>=0 && j < imageInput->height ){
+            float deltaX = spatialWidth / imageInput->getWidth();
+            float deltaY =  spatialHeight / imageInput->getHeight();
+            int i = xp / deltaX + imageInput->getWidth() / 2;
+            int j = yp / deltaY + imageInput->getHeight() / 2;
+            if( i >= 0 && i < imageInput->getWidth() ){
+                if( j>=0 && j < imageInput->getHeight() ){
                     ofColor temColor = imageInput->getColor(i, j);
                     tempArc->leds[p]->currentColor = temColor;
                 }
